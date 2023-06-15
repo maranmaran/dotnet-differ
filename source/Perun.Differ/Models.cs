@@ -1,24 +1,26 @@
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace Differ.DotNet
 {
     /// <summary>
     /// Represents found difference between two provided objects
     /// </summary>
+    [PublicAPI]
     public sealed class Difference
     {
         public string FullPath { get; set; }
         public string FieldPath { get; set; }
         public string FieldName { get; set; }
 
-        public object OldValue { get; set; }
-        public object NewValue { get; set; }
+        public object LeftValue { get; set; }
+        public object RightValue { get; set; }
 
         public string CustomFullPath { get; set; }
         public string CustomFieldPath { get; set; }
         public string CustomFieldName { get; set; }
 
-        public Difference(string fullPath, string customFullPath, object oldValue, object newValue)
+        public Difference(string fullPath, string customFullPath, object leftValue, object rightValue)
         {
             FullPath = fullPath;
 
@@ -36,8 +38,8 @@ namespace Differ.DotNet
                 CustomFieldPath = string.Join(".", customSplit.Take(customSplit.Length - 1));
             }
 
-            OldValue = oldValue;
-            NewValue = newValue;
+            LeftValue = leftValue;
+            RightValue = rightValue;
         }
     }
 }

@@ -34,8 +34,8 @@ namespace Differ.DotNet.Tests
                 var rightVal = prop.GetValue(right);
                 var diff = diffsMap[prop.Name];
 
-                Assert.Equal(leftVal, diff.OldValue);
-                Assert.Equal(rightVal, diff.NewValue);
+                Assert.Equal(leftVal, diff.LeftValue);
+                Assert.Equal(rightVal, diff.RightValue);
             }
         }
 
@@ -62,8 +62,8 @@ namespace Differ.DotNet.Tests
                 var rightVal = prop.GetValue(right);
                 var diff = diffsMap[prop.Name];
 
-                Assert.Equal(leftVal, diff.OldValue);
-                Assert.Equal(rightVal, diff.NewValue);
+                Assert.Equal(leftVal, diff.LeftValue);
+                Assert.Equal(rightVal, diff.RightValue);
             }
         }
 
@@ -87,8 +87,8 @@ namespace Differ.DotNet.Tests
             var leftVal = nestedProp.GetValue(nestedLeft);
             var rightVal = nestedProp.GetValue(nestedRight);
 
-            Assert.Equal(leftVal, nestedDiff.OldValue);
-            Assert.Equal(rightVal, nestedDiff.NewValue);
+            Assert.Equal(leftVal, nestedDiff.LeftValue);
+            Assert.Equal(rightVal, nestedDiff.RightValue);
         }
 
         [Fact]
@@ -418,9 +418,9 @@ namespace Differ.DotNet.Tests
 
             var diff = DifferDotNet.Diff(left, left).Single();
 
-            Assert.Equal(left.NoDiffKeepMe, diff.OldValue);
-            Assert.Equal(left.NoDiffKeepMe, diff.NewValue);
-            Assert.Equal(diff.OldValue, diff.NewValue);
+            Assert.Equal(left.NoDiffKeepMe, diff.LeftValue);
+            Assert.Equal(left.NoDiffKeepMe, diff.RightValue);
+            Assert.Equal(diff.LeftValue, diff.RightValue);
         }
 
         [Fact]
