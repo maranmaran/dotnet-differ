@@ -5,7 +5,6 @@
     <LangVersion>latest</LangVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>DotNet.Differ</RootNamespace>
-    <PackageId>DotNet.Differ</PackageId>
   </PropertyGroup>
   
   <ItemGroup>
