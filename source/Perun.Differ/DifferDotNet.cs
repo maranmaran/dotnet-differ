@@ -29,7 +29,7 @@ namespace Differ.DotNet
                 DiffActions.Default
             );
 
-            differences = AttributeDiffModifier.ApplyAttributes(differences);
+            differences = AttributeApplier.ApplyAttributes(differences);
 
             return differences.Diffs.OrderBy(x => x.Key).Select(x => x.Value);
         }

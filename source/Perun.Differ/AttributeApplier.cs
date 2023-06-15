@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Differ.DotNet
 {
-    internal static class AttributeDiffModifier
+    internal static class AttributeApplier
     {
         internal static DiffCollection ApplyAttributes(DiffCollection collection)
         {

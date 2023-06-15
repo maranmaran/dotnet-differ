@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <PackageId>Differ.DotNet</PackageId>
     <Version>1.0.0</Version>
     <Authors>Marko Urh</Authors>
     <Company>Perun</Company>

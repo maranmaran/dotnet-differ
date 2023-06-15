@@ -5,6 +5,7 @@
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
     <RootNamespace>Differ.DotNet.Tests</RootNamespace>
+    <AssemblyName>Differ.DotNet.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
