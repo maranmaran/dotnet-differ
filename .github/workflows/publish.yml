@@ -19,16 +19,16 @@ jobs:
           dotnet-version: "7.0.x"
 
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore ./source/Perun.Differ.sln
 
       - name: Test
-        run: dotnet test
+        run: dotnet test ./source/Perun.Differ.sln --no-restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build ./source/Perun.Differ.sln --configuration Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --no-restore
+        run: dotnet pack ./source/Perun.Differ.sln --configuration Release --no-build --no-restore
 
       - name: Publish to NuGet.org
         run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate

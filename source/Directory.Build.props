@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <Version>1.0.0</Version>
+    <Version>1.0.0-alpha</Version>
     <Authors>Marko Urh</Authors>
     <Company>Perun</Company>
     <Copyright>Copyright (c) 2023 Marko Urh and other authors.</Copyright>
     <Description>DotNet.Differ is diffing library for custom types and objects.</Description>
     <Summary>Get a list of differences of your instances quickly with flexibility to specify custom property names, what to keep or ignore in your difference and make your change observation features easier.</Summary>
+    <PackageIcon>banner.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/maranmaran/dotnet-differ/main/banner.png</PackageIconUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>dotnet,diff,audit,difference</PackageTags>
@@ -25,9 +27,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="banner.png" Visible="false" Pack="true" PackagePath="" />
-    <None Include="LICENSE" Visible="false" Pack="true" PackagePath="" />
-    <None Include="README.md" Visible="false" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\..\..\banner.png" Visible="false" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\..\..\LICENSE" Visible="false" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\..\..\README.md" Visible="false" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
