@@ -8,7 +8,7 @@ Get a list of differences of your instances quickly with flexibility to specify 
 
 # Installation
 
-[![NuGet](https://img.shields.io/nuget/v/differ-dotnet.svg)](https://www.nuget.org/packages/differ-dotnet)
+[![NuGet](https://img.shields.io/nuget/v/differ-dotnet.svg)](https://www.nuget.org/packages/Differ.DotNet)
 
 # Usage
 

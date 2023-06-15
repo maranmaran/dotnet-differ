@@ -27,7 +27,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\..\..\banner.png" Visible="false" Pack="true" PackagePath="" />
     <None Include="$(MSBuildProjectDirectory)\..\..\logo.png" Visible="false" Pack="true" PackagePath="" />
     <None Include="$(MSBuildProjectDirectory)\..\..\LICENSE" Visible="false" Pack="true" PackagePath="" />
     <None Include="$(MSBuildProjectDirectory)\..\..\README.md" Visible="false" Pack="true" PackagePath="" />
