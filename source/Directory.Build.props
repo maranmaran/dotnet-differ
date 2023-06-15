@@ -8,17 +8,17 @@
     <Copyright>Copyright (c) 2023 Marko Urh and other authors.</Copyright>
     <Description>DotNet.Differ is diffing library for custom types and objects.</Description>
     <Summary>Get a list of differences of your instances quickly with flexibility to specify custom property names, what to keep or ignore in your difference and make your change observation features easier.</Summary>
-    <PackageIcon>banner.png</PackageIcon>
-    <PackageIconUrl>https://raw.githubusercontent.com/maranmaran/dotnet-differ/main/banner.png</PackageIconUrl>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/logo.png</PackageIconUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>dotnet,diff,audit,difference</PackageTags>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/maranmaran/dotnet-differ</RepositoryUrl>
+    <RepositoryUrl>https://github.com/maranmaran/differ-dotnet</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\dotnet-differ.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\differ-dotnet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>CS0618,CS1591,SA0001,SA1600,SA1633,SA1649</NoWarn>
@@ -29,12 +29,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)\..\..\banner.png" Visible="false" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\..\..\logo.png" Visible="false" Pack="true" PackagePath="" />
     <None Include="$(MSBuildProjectDirectory)\..\..\LICENSE" Visible="false" Pack="true" PackagePath="" />
     <None Include="$(MSBuildProjectDirectory)\..\..\README.md" Visible="false" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>$(AssemblyName).Tests, PublicKey=$([System.IO.File]::ReadAllText($(MSBuildThisFileDirectory)/dotnet-differ.pub))</_Parameter1>
+      <_Parameter1>$(AssemblyName).Tests, PublicKey=$([System.IO.File]::ReadAllText($(MSBuildThisFileDirectory)/differ-dotnet.pub))</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 </Project>

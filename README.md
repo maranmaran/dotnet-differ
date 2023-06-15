@@ -1,6 +1,6 @@
 # Dotnet.Differ
 
-![DotnetDiffer Banner](https://raw.githubusercontent.com/maranmaran/dotnet-differ/main/banner.png)
+![DotnetDiffer Banner](https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/banner.png)
 
 DotNet.Differ is diffing library for custom types and objects.
 
@@ -8,7 +8,7 @@ Get a list of differences of your instances quickly with flexibility to specify 
 
 # Installation
 
-[![NuGet](https://img.shields.io/nuget/v/dotnet-differ.svg)](https://www.nuget.org/packages/dotnet-differ)
+[![NuGet](https://img.shields.io/nuget/v/differ-dotnet.svg)](https://www.nuget.org/packages/differ-dotnet)
 
 # Usage
 
@@ -16,7 +16,7 @@ API
 
 ## License
 
-See [LICENSE](https://github.com/maranmaran/dotnet-differ/blob/main/LICENSE).
+See [LICENSE](https://github.com/maranmaran/differ-dotnet/blob/main/LICENSE).
 
 ## Copyright
 
