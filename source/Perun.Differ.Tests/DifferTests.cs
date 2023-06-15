@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using AutoBogus;
 using Differ.DotNet.Tests.TestTypes;
 using Microsoft.VisualBasic;
@@ -13,67 +11,6 @@ namespace Differ.DotNet.Tests
 {
     public class DifferTests
     {
-        public class Car
-        {
-            public string Model { get; set; }
-
-            [IgnoreInDiff]
-            public string Color { get; set; }
-
-            public int Year { get; set; }
-
-            public List<Accessory> Accessories { get; set; }
-
-            [IgnoreInDiff]
-            public List<string> Features { get; set; }
-
-            [JsonIgnore]
-            [DiffPropertyName("features")]
-            public string FeaturesFlag => string.Join(", ", Features);
-
-            public Car(string model, string color, int year)
-            {
-                Model = model;
-                Color = color;
-                Year = year;
-                Accessories = new List<Accessory>();
-                Features = new List<string>();
-            }
-        }
-
-        public class Accessory
-        {
-            [KeepInDiff]
-            public string Name { get; set; }
-
-            public decimal Price { get; set; }
-        }
-
-        [Fact]
-        public void Test()
-        {
-            var car1 = new Car("Toyota Camry", "Blue", 2022);
-            car1.Accessories.Add(new Accessory { Name = "Floor Mats", Price = 50.99m });
-            car1.Accessories.Add(new Accessory { Name = "Roof Rack", Price = 150.99m });
-            car1.Features.Add("GPS Navigation");
-            car1.Features.Add("Backup Camera");
-
-            var car2 = new Car("Honda Civic", "Silver", 2023);
-            car2.Accessories.Add(new Accessory { Name = "Floor Mats", Price = 80.99m });
-            car2.Accessories.Add(new Accessory { Name = "Roof Rack", Price = 200.50m });
-            car2.Features.Add("Sunroof");
-            car2.Features.Add("Lane Departure Warning");
-
-            var carDiff = DifferDotNet.Diff(car1, car2);
-
-            var json = JsonSerializer.Serialize(carDiff, new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            });
-        }
-
         [Fact]
         public void Simple_Diffs()
         {
