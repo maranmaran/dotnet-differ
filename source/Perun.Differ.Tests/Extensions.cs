@@ -50,8 +50,8 @@ namespace Differ.DotNet.Tests
                 var right = rightL.ElementAtOrDefault(i);
                 var difference = differences.ElementAtOrDefault(i);
 
-                Assert.Equal(left, difference.OldValue);
-                Assert.Equal(right, difference.NewValue);
+                Assert.Equal(left, difference.LeftValue);
+                Assert.Equal(right, difference.RightValue);
             }
         }
     }
