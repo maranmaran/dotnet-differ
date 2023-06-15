@@ -32,7 +32,9 @@ jobs:
 
       - name: Get NuGet version
         id: nuget_version
-        run: echo "::set-output name=version::$(dotnet nuget push --list-source)"
+        run: |
+          version=$(grep -oP '(?<=<Version>).*(?=</Version>)' ./source/Directory.Build.props)
+          echo "::set-output name=version::$version"
 
       - name: Publish to NuGet.org
         run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }}
