@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoBogus;
+using DotNet.Differ.Tests.TestTypes;
 using Microsoft.VisualBasic;
-using Perun.Differ;
-using Tests.Perun.Differ.TestTypes;
 using Xunit;
 
-namespace Tests.Perun.Differ
+namespace DotNet.Differ.Tests
 {
     public class DifferTests
     {
@@ -16,10 +15,10 @@ namespace Tests.Perun.Differ
         public void Simple_Diffs()
         {
             var faker = new AutoFaker<SimpleTypes>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
             var diffsMap = diffs.ToDictionary(
                 x => x.FullPath,
                 x => x,
@@ -44,10 +43,10 @@ namespace Tests.Perun.Differ
         public void Complex_Diffs()
         {
             var faker = new AutoFaker<ComplexType>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
             var diffsMap = diffs.ToDictionary(
                 x => x.FullPath,
                 x => x,
@@ -72,10 +71,10 @@ namespace Tests.Perun.Differ
         public void NestedComplex_Diffs()
         {
             var faker = new AutoFaker<NestedComplexType>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
 
             var props = typeof(NestedComplexType).GetPropertiesFlat();
             Assert.Equal(props.Count, diffs.Count);
@@ -111,10 +110,10 @@ namespace Tests.Perun.Differ
                 x.Random.Word(),
             });
 
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(SimpleIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -237,10 +236,10 @@ namespace Tests.Perun.Differ
                 complexFaker.Generate(),
             });
 
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(ComplexIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -346,10 +345,10 @@ namespace Tests.Perun.Differ
         public void NestedSimpleIterable_Diffs()
         {
             var faker = new AutoFaker<NestedSimpleIterableTypes>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(NestedSimpleIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -401,10 +400,10 @@ namespace Tests.Perun.Differ
         public void NestedComplexIterable_Diffs()
         {
             var faker = new AutoFaker<NestedComplexIterableTypes>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(NestedComplexIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -415,9 +414,9 @@ namespace Tests.Perun.Differ
         public void KeepDiff_Simple_Keeps()
         {
             var faker = new AutoFaker<SimpleKeepModel>();
-            var left = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
 
-            var diff = ObjectDiffer.Diff(left, left).Single();
+            var diff = DotNetDiffer.Diff(left, left).Single();
 
             Assert.Equal(left.NoDiffKeepMe, diff.OldValue);
             Assert.Equal(left.NoDiffKeepMe, diff.NewValue);
@@ -428,9 +427,9 @@ namespace Tests.Perun.Differ
         public void KeepDiff_IterableSimple_KeepsAllChildren()
         {
             var faker = new AutoFaker<IterableSimpleKeepModel>();
-            var left = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, left).ToList();
+            var diffs = DotNetDiffer.Diff(left, left).ToList();
 
             Assert.Equal(left.NoDiffKeepMe.Count(), diffs.Count);
         }
@@ -439,9 +438,9 @@ namespace Tests.Perun.Differ
         public void KeepDiff_IterableComplex_KeepsAllChildren()
         {
             var faker = new AutoFaker<IterableComplexKeepModel>();
-            var left = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, left).ToList();
+            var diffs = DotNetDiffer.Diff(left, left).ToList();
 
             Assert.Equal(left.NoDiffKeepMe.Count(), diffs.Count);
         }
@@ -450,9 +449,9 @@ namespace Tests.Perun.Differ
         public void KeepDiff_Complex_KeepsAllChildren()
         {
             var faker = new AutoFaker<ComplexKeepModel>();
-            var left = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, left).ToList();
+            var diffs = DotNetDiffer.Diff(left, left).ToList();
 
             var expectedDiffCount = left.NoDiffKeepMe.GetType().GetProperties().Length;
             Assert.Equal(expectedDiffCount, diffs.Count);
@@ -462,10 +461,10 @@ namespace Tests.Perun.Differ
         public void IgnoreDiff_Simple_Ignores()
         {
             var faker = new AutoFaker<SimpleIgnoreModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diff = ObjectDiffer.Diff(left, right).ToList();
+            var diff = DotNetDiffer.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -474,10 +473,10 @@ namespace Tests.Perun.Differ
         public void IgnoreDiff_IterableSimple_IgnoresAllChildren()
         {
             var faker = new AutoFaker<IterableSimpleIgnoreModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diff = ObjectDiffer.Diff(left, right).ToList();
+            var diff = DotNetDiffer.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -486,10 +485,10 @@ namespace Tests.Perun.Differ
         public void IgnoreDiff_IterableComplex_IgnoresAllChildren()
         {
             var faker = new AutoFaker<IterableComplexIgnoreModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diff = ObjectDiffer.Diff(left, right).ToList();
+            var diff = DotNetDiffer.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -498,10 +497,10 @@ namespace Tests.Perun.Differ
         public void IgnoreDiff_Complex_IgnoresAllChildren()
         {
             var faker = new AutoFaker<ComplexIgnoreModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diff = ObjectDiffer.Diff(left, right).ToList();
+            var diff = DotNetDiffer.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -510,10 +509,10 @@ namespace Tests.Perun.Differ
         public void KeepParentIgnoreChild_IgnoresChildKeepsOther()
         {
             var faker = new AutoFaker<KeepParentIgnoreChildModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diff = ObjectDiffer.Diff(left, right).ToList();
+            var diff = DotNetDiffer.Diff(left, right).ToList();
 
             Assert.Equal(4, diff.Count);
         }
@@ -522,10 +521,10 @@ namespace Tests.Perun.Differ
         public void IgnoreParentKeepChild_KeepsChildIgnoresOther()
         {
             var faker = new AutoFaker<IgnoreParentKeepChildModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diffs = ObjectDiffer.Diff(left, right).ToList();
+            var diffs = DotNetDiffer.Diff(left, right).ToList();
 
             Assert.Equal(4, diffs.Count);
             Assert.True(diffs.Aggregate(true, (acc, cur) => acc &= cur.FieldName.EndsWith("keepMe")));
@@ -535,10 +534,10 @@ namespace Tests.Perun.Differ
         public void CustomNameDefined_RegisteredInDiff()
         {
             var faker = new AutoFaker<CustomNameModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diff = ObjectDiffer.Diff(left, right).Single();
+            var diff = DotNetDiffer.Diff(left, right).Single();
 
             Assert.Equal("ACustomName", diff.CustomFieldName);
             Assert.Equal("a", diff.FieldName);
@@ -548,10 +547,10 @@ namespace Tests.Perun.Differ
         public void NestedCustomNameDefined_RegisteredInDiff()
         {
             var faker = new AutoFaker<CustomNameNestedModel>();
-            var left = faker.Generate();
-            var right = faker.Generate();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
 
-            var diff = ObjectDiffer.Diff(left, right).Single();
+            var diff = DotNetDiffer.Diff(left, right).Single();
 
             Assert.Equal("BCustomName.ACustomName", diff.CustomFullPath);
             Assert.Equal("BCustomName", diff.CustomFieldPath);

@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using JetBrains.Annotations;
 
-namespace Perun.Differ
+namespace DotNet.Differ
 {
     [PublicAPI]
-    public sealed class ObjectDiffer
+    public sealed class DotNetDiffer
     {
         /// <summary>
         /// Compares two objects of type T and returns an enumerable collection of Difference objects representing the differences between the objects.
@@ -80,16 +79,16 @@ namespace Perun.Differ
                 var name = prop.Name.ToCamelCase();
                 var customName = (prop.GetCustomAttribute<DiffPropertyName>()?.Name ?? name);
 
-                path += name;
-                customPath += customName;
+                var fullPath = path + name;
+                var customFullPath = customPath + customName;
 
                 var resetActions = actions;
 
                 // Check for IgnoreInDiff attribute
                 if (prop.GetCustomAttribute<IgnoreInDiffAttribute>() != null)
                 {
-                    if (!diffs.IgnorePaths.Contains(path))
-                        diffs.IgnorePaths.Add(path);
+                    if (!diffs.IgnorePaths.Contains(fullPath))
+                        diffs.IgnorePaths.Add(fullPath);
 
                     actions |= DiffActions.Ignore;
                 }
@@ -97,16 +96,16 @@ namespace Perun.Differ
                 // Check for KeepInDiff attribute
                 if (prop.GetCustomAttribute<KeepInDiffAttribute>() != null)
                 {
-                    if (!diffs.KeepPaths.Contains(path))
-                        diffs.KeepPaths.Add(path);
+                    if (!diffs.KeepPaths.Contains(fullPath))
+                        diffs.KeepPaths.Add(fullPath);
 
                     actions |= DiffActions.Keep;
                 }
 
                 // Recurse on sub-objects
                 DiffRecursive(
-                    path + ".",
-                    customPath + ".",
+                    fullPath + ".",
+                    customFullPath + ".",
                     prop.PropertyType,
                     oldObj != null ? prop.GetValue(oldObj) : null,
                     newObj != null ? prop.GetValue(newObj) : null,
@@ -188,7 +187,7 @@ namespace Perun.Differ
             }
 
             var hasDiff = !oldObj?.Equals(newObj) ?? false;
-            if (hasDiff && diffs.Diffs.ContainsKey(diff.FullPath))
+            if (hasDiff && !diffs.Diffs.ContainsKey(diff.FullPath))
             {
                 diffs.Diffs.Add(diff.FullPath, diff);
             }

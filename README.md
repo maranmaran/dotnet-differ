@@ -1,16 +1,23 @@
-# Differ
+# Dotnet.Differ
 
-Short description.
+![DotnetDiffer Banner](https://raw.githubusercontent.com/maranmaran/dotnet-differ/main/docs/banner.png)
 
-# Table of Contents
+DotNet.Differ is diffing library for custom types and objects.
 
-- [Differ](#differ)
-- [Table of Contents](#table-of-contents)
-  - [Installation:](#installation)
-  - [Usage](#usage)
+Get a list of differences of your instances quickly with flexibility to specify custom property names, what to keep or ignore in your difference and make your change observation features easier.
 
-## Installation:
+# Installation
 
-- Azure Service Bus
+[![NuGet](https://img.shields.io/nuget/v/dotnet-differ.svg)](https://www.nuget.org/packages/dotnet-differ)
 
-## Usage
+# Usage
+
+API
+
+## License
+
+See [LICENSE](https://github.com/maranmaran/dotnet-differ/blob/main/LICENSE).
+
+## Copyright
+
+Copyright (c) 2023 Marko Urh and other authors.

@@ -1,6 +1,4 @@
-﻿using Perun.Differ;
-
-namespace Tests.Perun.Differ.TestTypes
+﻿namespace DotNet.Differ.Tests.TestTypes
 {
     internal class CustomNameModel
     {

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace Perun.Differ
+namespace DotNet.Differ
 {
     internal static class Extensions
     {

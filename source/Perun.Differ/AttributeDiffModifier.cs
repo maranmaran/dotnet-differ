@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Perun.Differ
+namespace DotNet.Differ
 {
     internal static class AttributeDiffModifier
     {

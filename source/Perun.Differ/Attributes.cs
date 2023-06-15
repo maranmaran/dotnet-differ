@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Perun.Differ
+namespace DotNet.Differ
 {
     /// <summary>
     /// Keeps property and subsequent children in audit diff even if no change was made.

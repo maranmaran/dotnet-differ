@@ -1,21 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3" />
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>DotNet.Differ</RootNamespace>
- 
+    <PackageId>DotNet.Differ</PackageId>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" VersionOverride="1.1.1" PrivateAssets="All" />
     <PackageReference Include="JetBrains.Annotations" VersionOverride="2022.3.1" PrivateAssets="All" />
     <PackageReference Include="System.Text.Json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="Tests.Perun.Differ" />
   </ItemGroup>
 
 </Project>

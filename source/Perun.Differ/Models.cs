@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Perun.Differ
+namespace DotNet.Differ
 {
     /// <summary>
     /// Represents found difference between two provided objects

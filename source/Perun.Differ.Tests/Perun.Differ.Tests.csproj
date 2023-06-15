@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3" />
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net7.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <RootNamespace>DotNet.Differ.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,11 +12,10 @@
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="AutoBogus"  />
+    <PackageReference Include="AutoBogus" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Perun.Differ\Perun.Differ.csproj" />
+    <ProjectReference Include="..\Perun.Differ\Perun.Differ.csproj" />
   </ItemGroup>
-
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Tests.Perun.Differ.TestTypes
+﻿namespace DotNet.Differ.Tests.TestTypes
 {
     public class ComplexType
     {

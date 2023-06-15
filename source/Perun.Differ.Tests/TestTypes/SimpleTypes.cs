@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Tests.Perun.Differ.TestTypes
+namespace DotNet.Differ.Tests.TestTypes
 {
     public class SimpleTypes
     {

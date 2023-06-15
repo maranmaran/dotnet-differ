@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Perun.Differ;
 using Xunit;
 
-namespace Tests.Perun.Differ
+namespace DotNet.Differ.Tests
 {
     internal static class Extensions
     {
