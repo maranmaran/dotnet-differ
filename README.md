@@ -1,6 +1,8 @@
 # Differ.DotNet
 
-![DotnetDiffer Banner](https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/banner.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/banner.png" />
+</p>
 
 Differ.DotNet is diffing library for custom types and objects.
 
