@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AutoBogus;
 using Differ.DotNet.Tests.TestTypes;
 using Microsoft.VisualBasic;
@@ -11,6 +13,67 @@ namespace Differ.DotNet.Tests
 {
     public class DifferTests
     {
+        public class Car
+        {
+            public string Model { get; set; }
+
+            [IgnoreInDiff]
+            public string Color { get; set; }
+
+            public int Year { get; set; }
+
+            public List<Accessory> Accessories { get; set; }
+
+            [IgnoreInDiff]
+            public List<string> Features { get; set; }
+
+            [JsonIgnore]
+            [DiffPropertyName("features")]
+            public string FeaturesFlag => string.Join(", ", Features);
+
+            public Car(string model, string color, int year)
+            {
+                Model = model;
+                Color = color;
+                Year = year;
+                Accessories = new List<Accessory>();
+                Features = new List<string>();
+            }
+        }
+
+        public class Accessory
+        {
+            [KeepInDiff]
+            public string Name { get; set; }
+
+            public decimal Price { get; set; }
+        }
+
+        [Fact]
+        public void Test()
+        {
+            var car1 = new Car("Toyota Camry", "Blue", 2022);
+            car1.Accessories.Add(new Accessory { Name = "Floor Mats", Price = 50.99m });
+            car1.Accessories.Add(new Accessory { Name = "Roof Rack", Price = 150.99m });
+            car1.Features.Add("GPS Navigation");
+            car1.Features.Add("Backup Camera");
+
+            var car2 = new Car("Honda Civic", "Silver", 2023);
+            car2.Accessories.Add(new Accessory { Name = "Floor Mats", Price = 80.99m });
+            car2.Accessories.Add(new Accessory { Name = "Roof Rack", Price = 200.50m });
+            car2.Features.Add("Sunroof");
+            car2.Features.Add("Lane Departure Warning");
+
+            var carDiff = DifferDotNet.Diff(car1, car2);
+
+            var json = JsonSerializer.Serialize(carDiff, new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            });
+        }
+
         [Fact]
         public void Simple_Diffs()
         {
@@ -18,7 +81,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
             var diffsMap = diffs.ToDictionary(
                 x => x.FullPath,
                 x => x,
@@ -46,7 +109,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
             var diffsMap = diffs.ToDictionary(
                 x => x.FullPath,
                 x => x,
@@ -74,7 +137,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
 
             var props = typeof(NestedComplexType).GetPropertiesFlat();
             Assert.Equal(props.Count, diffs.Count);
@@ -113,7 +176,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(SimpleIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -239,7 +302,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(ComplexIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -348,7 +411,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(NestedSimpleIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -403,7 +466,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
 
             var expectedPropsInDiffCount = typeof(NestedComplexIterableTypes).GetProperties().Length;
             var actualPropsInDiffCount = diffs.Select(x => x.FieldPath.Split('.').First()).ToHashSet().Count;
@@ -416,7 +479,7 @@ namespace Differ.DotNet.Tests
             var faker = new AutoFaker<SimpleKeepModel>();
             var left = faker.UseSeed(1).Generate();
 
-            var diff = DotNetDiffer.Diff(left, left).Single();
+            var diff = DifferDotNet.Diff(left, left).Single();
 
             Assert.Equal(left.NoDiffKeepMe, diff.OldValue);
             Assert.Equal(left.NoDiffKeepMe, diff.NewValue);
@@ -429,7 +492,7 @@ namespace Differ.DotNet.Tests
             var faker = new AutoFaker<IterableSimpleKeepModel>();
             var left = faker.UseSeed(1).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, left).ToList();
+            var diffs = DifferDotNet.Diff(left, left).ToList();
 
             Assert.Equal(left.NoDiffKeepMe.Count(), diffs.Count);
         }
@@ -440,7 +503,7 @@ namespace Differ.DotNet.Tests
             var faker = new AutoFaker<IterableComplexKeepModel>();
             var left = faker.UseSeed(1).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, left).ToList();
+            var diffs = DifferDotNet.Diff(left, left).ToList();
 
             Assert.Equal(left.NoDiffKeepMe.Count(), diffs.Count);
         }
@@ -451,7 +514,7 @@ namespace Differ.DotNet.Tests
             var faker = new AutoFaker<ComplexKeepModel>();
             var left = faker.UseSeed(1).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, left).ToList();
+            var diffs = DifferDotNet.Diff(left, left).ToList();
 
             var expectedDiffCount = left.NoDiffKeepMe.GetType().GetProperties().Length;
             Assert.Equal(expectedDiffCount, diffs.Count);
@@ -464,7 +527,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diff = DotNetDiffer.Diff(left, right).ToList();
+            var diff = DifferDotNet.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -476,7 +539,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diff = DotNetDiffer.Diff(left, right).ToList();
+            var diff = DifferDotNet.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -488,7 +551,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diff = DotNetDiffer.Diff(left, right).ToList();
+            var diff = DifferDotNet.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -500,7 +563,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diff = DotNetDiffer.Diff(left, right).ToList();
+            var diff = DifferDotNet.Diff(left, right).ToList();
 
             Assert.Empty(diff);
         }
@@ -512,7 +575,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diff = DotNetDiffer.Diff(left, right).ToList();
+            var diff = DifferDotNet.Diff(left, right).ToList();
 
             Assert.Equal(4, diff.Count);
         }
@@ -524,7 +587,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diffs = DotNetDiffer.Diff(left, right).ToList();
+            var diffs = DifferDotNet.Diff(left, right).ToList();
 
             Assert.Equal(4, diffs.Count);
             Assert.True(diffs.Aggregate(true, (acc, cur) => acc &= cur.FieldName.EndsWith("keepMe")));
@@ -537,7 +600,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diff = DotNetDiffer.Diff(left, right).Single();
+            var diff = DifferDotNet.Diff(left, right).Single();
 
             Assert.Equal("ACustomName", diff.CustomFieldName);
             Assert.Equal("a", diff.FieldName);
@@ -550,7 +613,7 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            var diff = DotNetDiffer.Diff(left, right).Single();
+            var diff = DifferDotNet.Diff(left, right).Single();
 
             Assert.Equal("BCustomName.ACustomName", diff.CustomFullPath);
             Assert.Equal("BCustomName", diff.CustomFieldPath);

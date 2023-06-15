@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 namespace Differ.DotNet
 {
     [PublicAPI]
-    public sealed class DotNetDiffer
+    public sealed class DifferDotNet
     {
         /// <summary>
         /// Compares two objects of type T and returns an enumerable collection of Difference objects representing the differences between the objects.
