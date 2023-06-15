@@ -30,6 +30,10 @@ jobs:
       - name: Pack NuGet package
         run: dotnet pack ./source/Perun.Differ.sln --configuration Release --no-build --no-restore
 
+      - name: Get NuGet version
+        id: nuget_version
+        run: echo "::set-output name=version::$(dotnet nuget push --list-source)"
+
       - name: Publish to NuGet.org
         run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }}
 
@@ -39,7 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.nuget_version.outputs.version }}
+          release_name: Release ${{ steps.nuget_version.outputs.version }}
           draft: false
           prerelease: false
