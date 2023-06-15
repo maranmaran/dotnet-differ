@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoBogus;
-using DotNet.Differ.Tests.TestTypes;
+using Differ.DotNet.Tests.TestTypes;
 using Microsoft.VisualBasic;
 using Xunit;
 
-namespace DotNet.Differ.Tests
+namespace Differ.DotNet.Tests
 {
     public class DifferTests
     {

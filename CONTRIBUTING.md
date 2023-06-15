@@ -1,10 +1,10 @@
-# Contributing to Dotnet.Differ
+# Contributing to Differ.DotNet
 
-Thank you for considering contributing to Dotnet.Differ! We welcome any contributions that can help improve the package and make it more useful for the community.
+Thank you for considering contributing to Differ.DotNet! We welcome any contributions that can help improve the package and make it more useful for the community.
 
 ## Ways to Contribute
 
-There are several ways you can contribute to Dotnet.Differ:
+There are several ways you can contribute to Differ.DotNet:
 
 - **Bug Reports**: If you encounter any bugs or issues while using the package, please open a new issue on the GitHub repository.
 - **Feature Requests**: If you have ideas for new features or enhancements, feel free to submit a feature request on the GitHub repository.
@@ -34,10 +34,10 @@ If you encounter any bugs, issues, or have any questions, please feel free to op
 
 ## License
 
-By contributing to Dotnet.Differ, you agree that your contributions will be licensed under the [LICENSE](link-to-license-file) of the repository.
+By contributing to Differ.DotNet, you agree that your contributions will be licensed under the [LICENSE](link-to-license-file) of the repository.
 
 ## Contact
 
 If you have any questions or need further assistance, you can reach out to us at [contact@email.com].
 
-We appreciate your interest and contributions to Dotnet.Differ!
+We appreciate your interest and contributions to Differ.DotNet!

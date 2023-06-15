@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <OutputType>Library</OutputType>
-    <RootNamespace>DotNet.Differ</RootNamespace>
+    <RootNamespace>Differ.DotNet</RootNamespace>
   </PropertyGroup>
   
   <ItemGroup>

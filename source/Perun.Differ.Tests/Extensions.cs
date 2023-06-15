@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
-namespace DotNet.Differ.Tests
+namespace Differ.DotNet.Tests
 {
     internal static class Extensions
     {

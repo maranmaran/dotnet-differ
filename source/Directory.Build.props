@@ -6,7 +6,7 @@
     <Authors>Marko Urh</Authors>
     <Company>Perun</Company>
     <Copyright>Copyright (c) 2023 Marko Urh and other authors.</Copyright>
-    <Description>DotNet.Differ is diffing library for custom types and objects.</Description>
+    <Description>Differ.DotNet is diffing library for custom types and objects.</Description>
     <Summary>Get a list of differences of your instances quickly with flexibility to specify custom property names, what to keep or ignore in your difference and make your change observation features easier.</Summary>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/logo.png</PackageIconUrl>

@@ -1,4 +1,4 @@
-name: Publish Dotnet.Differ
+name: Publish Differ.DotNet
 
 on:
   push:

@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace DotNet.Differ
+namespace Differ.DotNet
 {
     /// <summary>
     /// Represents found difference between two provided objects

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace DotNet.Differ
+namespace Differ.DotNet
 {
     [PublicAPI]
     public sealed class DotNetDiffer

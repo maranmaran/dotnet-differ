@@ -4,7 +4,7 @@
     <TargetFrameworks>net7.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
-    <RootNamespace>DotNet.Differ.Tests</RootNamespace>
+    <RootNamespace>Differ.DotNet.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

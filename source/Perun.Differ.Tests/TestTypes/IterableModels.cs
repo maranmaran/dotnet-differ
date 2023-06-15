@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.VisualBasic;
 
-namespace DotNet.Differ.Tests.TestTypes
+namespace Differ.DotNet.Tests.TestTypes
 {
     public class SimpleIterableTypes
     {
