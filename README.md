@@ -148,7 +148,7 @@ Combine and enjoy:
 
         [JsonIgnore]
         [DiffPropertyName("features")]
-        public string FeaturesFlag => string.Join(", ", Features);
+        public string FeaturesFlat => string.Join(", ", Features);
 
         public Car(string model, string color, int year)
         {
@@ -216,9 +216,9 @@ Output:
     "rightValue": 200.50
   },
   {
-    "fullPath": "featuresFlag",
+    "fullPath": "featuresFlat",
     "fieldPath": "",
-    "fieldName": "featuresFlag",
+    "fieldName": "featuresFlat",
     "leftValue": "GPS Navigation, Backup Camera",
     "rightValue": "Sunroof, Lane Departure Warning",
     "customFullPath": "features",
