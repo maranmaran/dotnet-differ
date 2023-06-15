@@ -31,22 +31,22 @@ Output:
     "fullPath": "color",
     "fieldPath": "",
     "fieldName": "color",
-    "oldValue": "Blue",
-    "newValue": "Red"
+    "leftValue": "Blue",
+    "rightValue": "Red"
   },
   {
     "fullPath": "model",
     "fieldPath": "",
     "fieldName": "model",
-    "oldValue": "Toyota Camry",
-    "newValue": "Ford Mustang"
+    "leftValue": "Toyota Camry",
+    "rightValue": "Ford Mustang"
   },
   {
     "fullPath": "year",
     "fieldPath": "",
     "fieldName": "year",
-    "oldValue": 2022,
-    "newValue": 2023
+    "leftValue": 2022,
+    "rightValue": 2023
   }
 ]
 ```
@@ -72,8 +72,8 @@ Output
     "fullPath": "model",
     "fieldPath": "",
     "fieldName": "model",
-    "oldValue": "Toyota",
-    "newValue": "Toyota"
+    "leftValue": "Toyota",
+    "rightValue": "Toyota"
   }
 ]
 ```
@@ -118,8 +118,8 @@ Output
     "fullPath": "model",
     "fieldPath": "",
     "fieldName": "model",
-    "oldValue": "Toyota",
-    "newValue": "Ford",
+    "leftValue": "Toyota",
+    "rightValue": "Ford",
     "customFullPath": "Make",
     "customFieldPath": "",
     "customFieldName": "Make"
@@ -191,36 +191,36 @@ Output:
     "fullPath": "accessories.0.name",
     "fieldPath": "accessories.0",
     "fieldName": "name",
-    "oldValue": "Floor Mats",
-    "newValue": "Floor Mats"
+    "leftValue": "Floor Mats",
+    "rightValue": "Floor Mats"
   },
   {
     "fullPath": "accessories.0.price",
     "fieldPath": "accessories.0",
     "fieldName": "price",
-    "oldValue": 50.99,
-    "newValue": 80.99
+    "leftValue": 50.99,
+    "rightValue": 80.99
   },
   {
     "fullPath": "accessories.1.name",
     "fieldPath": "accessories.1",
     "fieldName": "name",
-    "oldValue": "Roof Rack",
-    "newValue": "Roof Rack"
+    "leftValue": "Roof Rack",
+    "rightValue": "Roof Rack"
   },
   {
     "fullPath": "accessories.1.price",
     "fieldPath": "accessories.1",
     "fieldName": "price",
-    "oldValue": 150.99,
-    "newValue": 200.50
+    "leftValue": 150.99,
+    "rightValue": 200.50
   },
   {
     "fullPath": "featuresFlag",
     "fieldPath": "",
     "fieldName": "featuresFlag",
-    "oldValue": "GPS Navigation, Backup Camera",
-    "newValue": "Sunroof, Lane Departure Warning",
+    "leftValue": "GPS Navigation, Backup Camera",
+    "rightValue": "Sunroof, Lane Departure Warning",
     "customFullPath": "features",
     "customFieldPath": "",
     "customFieldName": "features"
@@ -229,15 +229,15 @@ Output:
     "fullPath": "model",
     "fieldPath": "",
     "fieldName": "model",
-    "oldValue": "Toyota Camry",
-    "newValue": "Honda Civic"
+    "leftValue": "Toyota Camry",
+    "rightValue": "Honda Civic"
   },
   {
     "fullPath": "year",
     "fieldPath": "",
     "fieldName": "year",
-    "oldValue": 2022,
-    "newValue": 2023
+    "leftValue": 2022,
+    "rightValue": 2023
   }
 ]
 ```
