@@ -28,7 +28,7 @@ jobs:
         run: dotnet build ./source/Perun.Differ.sln --configuration Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack ./source/Perun.Differ.sln --configuration Release --no-build --no-restore
+        run: dotnet pack ./source/Perun.Differ.sln --configuration Release --include-symbols --no-build --no-restore
 
       - name: Get NuGet version
         id: nuget_version
@@ -37,7 +37,7 @@ jobs:
           echo "::set-output name=version::$version"
 
       - name: Publish to NuGet.org
-        run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate -k ${{ secrets.NUGET_API_KEY }}
 
       - name: Create Release
         id: create_release
