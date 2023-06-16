@@ -1,6 +1,8 @@
 # Differ.DotNet
 
-![DotnetDiffer Banner](https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/banner.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/banner.png" />
+</p>
 
 Differ.DotNet is diffing library for custom types and objects.
 
@@ -148,7 +150,7 @@ Combine and enjoy:
 
         [JsonIgnore]
         [DiffPropertyName("features")]
-        public string FeaturesFlag => string.Join(", ", Features);
+        public string FeaturesFlat => string.Join(", ", Features);
 
         public Car(string model, string color, int year)
         {
@@ -216,9 +218,9 @@ Output:
     "rightValue": 200.50
   },
   {
-    "fullPath": "featuresFlag",
+    "fullPath": "featuresFlat",
     "fieldPath": "",
-    "fieldName": "featuresFlag",
+    "fieldName": "featuresFlat",
     "leftValue": "GPS Navigation, Backup Camera",
     "rightValue": "Sunroof, Lane Departure Warning",
     "customFullPath": "features",
