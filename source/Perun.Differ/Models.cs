@@ -20,26 +20,34 @@ namespace Differ.DotNet
         public string CustomFieldPath { get; set; }
         public string CustomFieldName { get; set; }
 
+        public Difference()
+        {
+        }
+
         public Difference(string fullPath, string customFullPath, object leftValue, object rightValue)
         {
-            FullPath = fullPath;
-
-            var fullPathSplit = FullPath.Split('.');
-            FieldName = FullPath.Split('.').LastOrDefault();
-            FieldPath = string.Join(".", fullPathSplit.Take(fullPathSplit.Length - 1));
-
-            if (fullPath != customFullPath)
-            {
-                CustomFullPath = customFullPath;
-
-                var customSplit = CustomFullPath.Split('.');
-
-                CustomFieldName = CustomFullPath.Split('.').LastOrDefault();
-                CustomFieldPath = string.Join(".", customSplit.Take(customSplit.Length - 1));
-            }
-
             LeftValue = leftValue;
             RightValue = rightValue;
+
+            (FullPath, FieldName, FieldPath) = SetPath(fullPath);
+            if (fullPath != customFullPath && customFullPath != null)
+            {
+                (CustomFullPath, CustomFieldName, CustomFieldPath) = SetPath(customFullPath);
+            }
+        }
+
+        private (string, string, string) SetPath(string fullPath)
+        {
+            if (fullPath == null)
+            {
+                return (null, null, null);
+            }
+
+            var pathSplit = fullPath.Split('.');
+            var fieldName = pathSplit.LastOrDefault();
+            var fieldPath = string.Join(".", pathSplit.Take(pathSplit.Length - 1));
+
+            return (fullPath, fieldName, fieldPath);
         }
     }
 }
