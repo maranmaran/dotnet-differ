@@ -2,7 +2,6 @@
 <Project>
   <ItemGroup>
     <GlobalPackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0" />
-    <PackageReference Update="System.Text.Json" Version="6.0.7" />
     <!-- Unit and integration test dependencies: -->
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.6.2" />
     <PackageReference Update="coverlet.collector" Version="3.2.0" />
