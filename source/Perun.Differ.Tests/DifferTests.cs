@@ -68,6 +68,19 @@ namespace Differ.DotNet.Tests
         }
 
         [Fact]
+        public void Nulls_Diffs()
+        {
+            var faker = new AutoFaker<SimpleTypes>();
+            var entity = faker.UseSeed(1).Generate();
+
+            var diffsRight = DifferDotNet.Diff(null, entity).ToList();
+            var diffsLeft = DifferDotNet.Diff(entity, null).ToList();
+            var diffsNone = DifferDotNet.Diff<SimpleTypes>(null, null).ToList();
+
+            Assert.Empty(diffsNone);
+        }
+
+        [Fact]
         public void NestedComplex_Diffs()
         {
             var faker = new AutoFaker<NestedComplexType>();

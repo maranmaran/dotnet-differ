@@ -13,12 +13,12 @@ namespace Differ.DotNet
         public string FieldPath { get; set; }
         public string FieldName { get; set; }
 
-        public object LeftValue { get; set; }
-        public object RightValue { get; set; }
-
         public string CustomFullPath { get; set; }
         public string CustomFieldPath { get; set; }
         public string CustomFieldName { get; set; }
+
+        public object LeftValue { get; set; }
+        public object RightValue { get; set; }
 
         public Difference()
         {
