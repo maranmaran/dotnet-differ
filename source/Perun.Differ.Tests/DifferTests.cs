@@ -68,6 +68,38 @@ namespace Differ.DotNet.Tests
         }
 
         [Fact]
+        public void Nulls_Diffs()
+        {
+            var entity = new AutoFaker<SimpleTypes>().UseSeed(1).Generate();
+            var entity2 = new AutoFaker<ComplexType>().UseSeed(1).Generate();
+            var entity3 = new AutoFaker<SimpleIterableTypes>().UseSeed(1).Generate();
+            var entity4 = new AutoFaker<ComplexIterableTypes>().UseSeed(1).Generate();
+
+            var diffsNone = DifferDotNet.Diff<SimpleTypes>(null, null).ToList();
+            Assert.Empty(diffsNone);
+
+            var diffsRight = DifferDotNet.Diff(null, entity).ToList();
+            var diffsLeft = DifferDotNet.Diff(entity, null).ToList();
+            Assert.NotEmpty(diffsRight);
+            Assert.NotEmpty(diffsLeft);
+
+            diffsRight = DifferDotNet.Diff(null, entity2).ToList();
+            diffsLeft = DifferDotNet.Diff(entity2, null).ToList();
+            Assert.NotEmpty(diffsRight);
+            Assert.NotEmpty(diffsLeft);
+
+            diffsRight = DifferDotNet.Diff(null, entity3).ToList();
+            diffsLeft = DifferDotNet.Diff(entity3, null).ToList();
+            Assert.NotEmpty(diffsRight);
+            Assert.NotEmpty(diffsLeft);
+
+            diffsRight = DifferDotNet.Diff(null, entity4).ToList();
+            diffsLeft = DifferDotNet.Diff(entity4, null).ToList();
+            Assert.NotEmpty(diffsRight);
+            Assert.NotEmpty(diffsLeft);
+        }
+
+        [Fact]
         public void NestedComplex_Diffs()
         {
             var faker = new AutoFaker<NestedComplexType>();

@@ -38,23 +38,23 @@ namespace Differ.DotNet
             string path,
             string customPath,
             Type type,
-            T oldObj,
-            T newObj,
+            T leftObj,
+            T rightObj,
             DiffCollection diffs,
             DiffActions actions
         )
         {
-            if (HandleSimpleType(path, customPath, type, oldObj, newObj, diffs, actions))
+            if (HandleSimpleType(path, customPath, type, leftObj, rightObj, diffs, actions))
             {
                 return diffs;
             }
 
-            if (HandleIterable(path, customPath, type, oldObj, newObj, diffs, actions))
+            if (HandleIterable(path, customPath, type, leftObj, rightObj, diffs, actions))
             {
                 return diffs;
             }
 
-            HandleComplex(path, customPath, type, oldObj, newObj, diffs, actions);
+            HandleComplex(path, customPath, type, leftObj, rightObj, diffs, actions);
 
             return diffs;
         }
@@ -63,7 +63,7 @@ namespace Differ.DotNet
             string path,
             string customPath,
             Type type,
-            T oldObj, T newObj,
+            T leftObj, T rightObj,
             DiffCollection diffs,
             DiffActions actions
         )
@@ -107,8 +107,8 @@ namespace Differ.DotNet
                     fullPath + ".",
                     customFullPath + ".",
                     prop.PropertyType,
-                    oldObj != null ? prop.GetValue(oldObj) : null,
-                    newObj != null ? prop.GetValue(newObj) : null,
+                    leftObj != null ? prop.GetValue(leftObj) : null,
+                    rightObj != null ? prop.GetValue(rightObj) : null,
                     diffs,
                     actions
                 );
@@ -123,7 +123,7 @@ namespace Differ.DotNet
             string path,
             string customPath,
             Type type,
-            T oldObj, T newObj,
+            T leftObj, T rightObj,
             DiffCollection diffs,
             DiffActions actions
         )
@@ -133,20 +133,20 @@ namespace Differ.DotNet
                 return false;
             }
 
-            var oldArray = (oldObj as IEnumerable)?.GetEnumerator().ToArray() ?? Array.Empty<object>();
-            var newArray = (newObj as IEnumerable)?.GetEnumerator().ToArray() ?? Array.Empty<object>();
+            var leftArr = (leftObj as IEnumerable)?.GetEnumerator().ToArray() ?? Array.Empty<object>();
+            var rightArr = (rightObj as IEnumerable)?.GetEnumerator().ToArray() ?? Array.Empty<object>();
 
-            for (var i = 0; i < Math.Max(oldArray.Length, newArray.Length); i++)
+            for (var i = 0; i < Math.Max(leftArr.Length, rightArr.Length); i++)
             {
-                var currentOld = i < oldArray.Length ? oldArray[i] : null;
-                var currentNew = i < newArray.Length ? newArray[i] : null;
+                var curL = i < leftArr.Length ? leftArr[i] : null;
+                var curR = i < rightArr.Length ? rightArr[i] : null;
 
                 DiffRecursive(
                     path + $"{i}.",
                     customPath + $"{i}.",
-                    type.GetIterableType() ?? currentOld?.GetType() ?? currentNew?.GetType(),
-                    currentOld,
-                    currentNew,
+                    type.GetIterableType() ?? curL?.GetType() ?? curR?.GetType(),
+                    curL,
+                    curR,
                     diffs,
                     actions
                 );
@@ -159,7 +159,7 @@ namespace Differ.DotNet
             string path,
             string customPath,
             Type type,
-            T oldObj, T newObj,
+            T leftObj, T rightObj,
             DiffCollection diffs,
             DiffActions actions
         )
@@ -172,8 +172,8 @@ namespace Differ.DotNet
             var diff = new Difference(
                 path.Substring(0, path.Length - 1),
                 customPath.Substring(0, customPath.Length - 1),
-                oldObj,
-                newObj
+                leftObj,
+                rightObj
             );
 
             if (actions.HasFlag(DiffActions.Keep))
@@ -181,17 +181,16 @@ namespace Differ.DotNet
                 diffs.KeepDiffs.Add(diff);
             }
 
-            if (actions.HasFlag(DiffActions.Ignore))
+            var exitCond = actions.HasFlag(DiffActions.Ignore)
+                || leftObj == null && rightObj == null
+                || diffs.Diffs.ContainsKey(diff.FullPath)
+                || leftObj?.Equals(rightObj) == true;
+            if (exitCond)
             {
                 return true;
             }
 
-            var hasDiff = !oldObj?.Equals(newObj) ?? false;
-            if (hasDiff && !diffs.Diffs.ContainsKey(diff.FullPath))
-            {
-                diffs.Diffs.Add(diff.FullPath, diff);
-            }
-
+            diffs.Diffs.Add(diff.FullPath, diff);
             return true;
         }
     }
