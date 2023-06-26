@@ -5,7 +5,7 @@ using System.Linq;
 namespace Differ.DotNet
 {
     [Serializable]
-    public class Trie<TValue> : TrieNode<TValue>
+    internal sealed class Trie<TValue> : TrieNode<TValue>
     {
         public IEnumerable<TValue> Retrieve(string query)
         {
@@ -19,7 +19,7 @@ namespace Differ.DotNet
     }
 
     [Serializable]
-    public class TrieNode<TValue> : TrieNodeBase<TValue>
+    internal class TrieNode<TValue> : TrieNodeBase<TValue>
     {
         private readonly Dictionary<char, TrieNode<TValue>> m_Children;
         private readonly Queue<TValue> m_Values;
@@ -73,7 +73,7 @@ namespace Differ.DotNet
     }
 
     [Serializable]
-    public abstract class TrieNodeBase<TValue>
+    internal abstract class TrieNodeBase<TValue>
     {
         protected abstract int KeyLength { get; }
 
