@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Differ.DotNet
 {
+    /// <summary>
+    /// https://github.com/gmamaladze/trienet
+    /// </summary>
     [Serializable]
     internal sealed class Trie<TValue> : TrieNode<TValue>
     {
