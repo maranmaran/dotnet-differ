@@ -94,12 +94,11 @@ namespace Differ.DotNet
                 }
 
                 // Check for KeepInDiff attribute
-                if (prop.GetCustomAttribute<KeepInDiffAttribute>() != null)
+                if (prop.GetCustomAttribute<KeepInDiffAttribute>() is { } keepAtt)
                 {
-                    if (!diffs.KeepPaths.Contains(fullPath))
-                        diffs.KeepPaths.Add(fullPath);
-
-                    actions |= DiffActions.Keep;
+                    actions |= keepAtt.IgnoreIfNoOtherDiff
+                        ? DiffActions.KeepOptional
+                        : DiffActions.Keep;
                 }
 
                 // Recurse on sub-objects
@@ -176,8 +175,10 @@ namespace Differ.DotNet
                 rightObj
             );
 
-            if (actions.HasFlag(DiffActions.Keep))
+            if (actions.HasFlag(DiffActions.Keep) || actions.HasFlag(DiffActions.KeepOptional))
             {
+                diff.IgnoreIfNoOtherDiff = actions.HasFlag(DiffActions.KeepOptional);
+                diff.Keep = true;
                 diffs.KeepDiffs.Add(diff);
             }
 
