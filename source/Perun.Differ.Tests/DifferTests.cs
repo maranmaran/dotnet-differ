@@ -443,6 +443,54 @@ namespace Differ.DotNet.Tests
         }
 
         [Fact]
+        public void OptionalKeepDiff_Simple_NoSiblingChanges_Ignores()
+        {
+            var faker = new AutoFaker<SimpleOptionalKeepModel>();
+            var left = faker.UseSeed(1).Generate();
+
+            var diff = DifferDotNet.Diff(left, left).SingleOrDefault();
+
+            Assert.Null(diff);
+        }
+
+        [Fact]
+        public void OptionalKeepDiff_Simple_SiblingChanges_DoesNotIgnore()
+        {
+            var faker = new AutoFaker<SimpleOptionalKeepModel>();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
+
+            var diffs = DifferDotNet.Diff(left, right);
+
+            Assert.Equal(2, diffs.Count());
+        }
+
+        [Fact]
+        public void OptionalKeepDiff_Complex_NoSiblingChange_Ignores()
+        {
+            var faker = new AutoFaker<ComplexOptionalKeepModel>();
+            var left = faker.UseSeed(1).Generate();
+
+            var diff = DifferDotNet.Diff(left, left).SingleOrDefault();
+
+            Assert.Null(diff);
+        }
+
+        [Fact]
+        public void OptionalKeepDiff_Complex_ChildChange_DoesNotIgnore()
+        {
+            var faker = new AutoFaker<ComplexOptionalKeepModel>();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
+
+            right.NoDiff = left.NoDiff;
+
+            var diff = DifferDotNet.Diff(left, right);
+
+            Assert.NotNull(diff.SingleOrDefault());
+        }
+
+        [Fact]
         public void KeepDiff_Simple_Keeps()
         {
             var faker = new AutoFaker<SimpleKeepModel>();
@@ -453,6 +501,7 @@ namespace Differ.DotNet.Tests
             Assert.Equal(left.NoDiffKeepMe, diff.LeftValue);
             Assert.Equal(left.NoDiffKeepMe, diff.RightValue);
             Assert.Equal(diff.LeftValue, diff.RightValue);
+            Assert.False(diff.IgnoreIfNoOtherDiff);
         }
 
         [Fact]
@@ -464,6 +513,7 @@ namespace Differ.DotNet.Tests
             var diffs = DifferDotNet.Diff(left, left).ToList();
 
             Assert.Equal(left.NoDiffKeepMe.Count(), diffs.Count);
+            Assert.True(diffs.TrueForAll(x => !x.IgnoreIfNoOtherDiff));
         }
 
         [Fact]
@@ -475,6 +525,7 @@ namespace Differ.DotNet.Tests
             var diffs = DifferDotNet.Diff(left, left).ToList();
 
             Assert.Equal(left.NoDiffKeepMe.Count(), diffs.Count);
+            Assert.True(diffs.TrueForAll(x => !x.IgnoreIfNoOtherDiff));
         }
 
         [Fact]
@@ -487,6 +538,7 @@ namespace Differ.DotNet.Tests
 
             var expectedDiffCount = left.NoDiffKeepMe.GetType().GetProperties().Length;
             Assert.Equal(expectedDiffCount, diffs.Count);
+            Assert.True(diffs.TrueForAll(x => !x.IgnoreIfNoOtherDiff));
         }
 
         [Fact]

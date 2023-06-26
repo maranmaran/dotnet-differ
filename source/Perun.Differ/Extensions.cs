@@ -9,6 +9,17 @@ namespace Differ.DotNet
 {
     internal static class Extensions
     {
+        internal static bool TryAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value)
+        {
+            if (dict.ContainsKey(key))
+            {
+                dict.Add(key, value);
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Reference: https://stackoverflow.com/a/65079923
         /// </summary>

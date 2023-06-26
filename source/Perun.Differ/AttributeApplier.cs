@@ -7,75 +7,64 @@ namespace Differ.DotNet
     {
         internal static DiffCollection ApplyAttributes(DiffCollection collection)
         {
-            var keepPaths = collection.KeepPaths.ToList();
-            var ignorePaths = collection.IgnorePaths.ToList();
+            var trie = CreateTrie(collection);
 
-            AddDiffsToKeep(collection.Diffs, collection.KeepDiffs);
-            RemoveDiffsToIgnore(collection.Diffs, ignorePaths, keepPaths);
+            AddDiffsToKeep(collection.Diffs, collection.KeepDiffs, trie);
+            RemoveDiffsToIgnore(collection.Diffs, collection.IgnorePaths);
 
             return collection;
         }
 
-        private static Dictionary<string, Difference> AddDiffsToKeep(
-            Dictionary<string, Difference> differences,
-            List<Difference> keepDiffs
-        )
+        private static Trie<Difference> CreateTrie(DiffCollection collection)
         {
-            foreach (var keepDiff in keepDiffs)
+            var hasOptional = collection.KeepDiffs.Any(x => x.IgnoreIfNoOtherDiff);
+            var hasIgnore = collection.IgnorePaths.Any();
+
+            var trie = new Trie<Difference>();
+            if (hasOptional || hasIgnore)
             {
-                // relevant, keep it in diff
-                if (!differences.ContainsKey(keepDiff.FullPath))
+                foreach (var diff in collection.Diffs.Values)
                 {
-                    differences.Add(keepDiff.FullPath, keepDiff);
+                    trie.Add(diff.FieldPath, diff);
                 }
             }
 
-            return differences;
+            return trie;
         }
 
-        private static Dictionary<string, Difference> RemoveDiffsToIgnore(
+        private static void AddDiffsToKeep(
             Dictionary<string, Difference> differences,
-            List<string> ignorePaths,
-            List<string> keepPaths
-            )
+            HashSet<Difference> keepDiffs,
+            Trie<Difference> trie
+        )
         {
-            var ignoreKeys = new List<string>();
-            foreach (var ignorePath in ignorePaths)
+            foreach (var diff in keepDiffs)
             {
-                var ignorePathSplit = ignorePath.Split('.');
+                if (diff.IgnoreIfNoOtherDiff && !trie.Retrieve(diff.FieldPath).Any())
+                {
+                    continue;
+                }
 
-                ignoreKeys.AddRange(
-                    differences.Keys.Where(key =>
-                    {
-                        var keySplit = key.Split('.');
+                var added = differences.TryAdd(diff.FullPath, diff);
 
-                        var startsWith = true;
-                        for (var i = 0; i < ignorePathSplit.Length; i++)
-                        {
-                            if (i >= keySplit.Length)
-                            {
-                                break;
-                            }
-
-                            var ignoreNode = ignorePathSplit[i];
-                            var keyNode = keySplit[i];
-
-                            startsWith &= ignoreNode?.ToLower() == keyNode?.ToLower();
-                        }
-
-                        return startsWith;
-                    })
-                );
+                if (added) // modify trie for search on new records
+                {
+                    trie.Add(diff.FullPath, diff);
+                }
             }
+        }
 
-            ignoreKeys = ignoreKeys.Except(keepPaths).ToList();
+        private static void RemoveDiffsToIgnore(
+            Dictionary<string, Difference> differences,
+            HashSet<string> ignorePaths
+        )
+        {
+            var pathsToRemove = ignorePaths.Where(differences.ContainsKey);
 
-            foreach (var ignoreKey in ignoreKeys)
+            foreach (var path in pathsToRemove)
             {
-                differences.Remove(ignoreKey);
+                differences.Remove(path);
             }
-
-            return differences;
         }
     }
 }
