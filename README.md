@@ -80,6 +80,8 @@ Output
 ]
 ```
 
+Keep in diff has optional property `IgnoreIfNoSiblingOrChildDiff` which will actually ignore keep attribute if there's no sibling or child diff present rendering it unusable or not desired as it's extra information without some other context.
+
 ## IgnoreInDiff attribute
 
 Ignores root and child values
@@ -127,6 +129,47 @@ Output
     "customFieldName": "Make"
   }
 ]
+```
+
+## DiffCollectionId attribute
+
+Switches default index-based diffing to key-value diff.
+Nested types and values in the collection return their keys which is used to detect changes.
+
+Say we have 3 items in an array and we remove first item:
+
+With index-based matching
+
+| left    | right   |
+| ------- | ------- |
+| 1, car  | 2, bike |
+| 2, bike | 3, road |
+| 3, road | null    |
+
+Diff will be:
+car -> bike
+road -> null
+
+Because due to removal, items moved in array and indexes changed.
+
+With key-based matching by defining DiffCollectionId of underlying object:
+
+| left    | right   |
+| ------- | ------- |
+| 1, car  | null    |
+| 2, bike | 2, bike |
+| 3, road | 3, road |
+
+Diff will be:
+car -> null
+
+```cs
+class Car([property:DiffPropertyName("Make")]string Model);
+
+Car car1 = new Car("Toyota");
+Car car2 = new Car("Ford");
+
+IEnumerable<Difference> carDiff = DifferDotNet.Diff(car1, car2);
 ```
 
 # Full demo
