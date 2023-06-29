@@ -248,6 +248,45 @@ namespace Differ.DotNet.Tests
         }
 
         [Fact]
+        public void ComplexIterable_ListIdDefined_DeleteFirstItem_DeleteDiffRatherThanUpdateDiff()
+        {
+            var faker = new AutoFaker<ComplexIterableWithId>();
+
+            var left = faker.Generate();
+            var right = new ComplexIterableWithId
+            {
+                Iterable = left.Iterable.Select(x => new ComplexWithId(x.Id, x.Value)).ToList()
+            };
+
+            right.Iterable.RemoveAt(0);
+
+            var diff = DifferDotNet.Diff(left, right).Single();
+
+            Assert.Null(diff.RightValue);
+        }
+
+        [Fact]
+        public void ComplexNestedIterable_ListIdDefined_DeleteFirstItem_DeleteDiffRatherThanUpdateDiff()
+        {
+            var faker = new AutoFaker<ComplexNestedIterableWithId>();
+
+            var left = faker.Generate();
+            var right = new ComplexNestedIterableWithId
+            {
+                Iterable = left.Iterable.Select(x => x.Select(y => new ComplexWithId(y.Id, y.Value)).ToList()).ToList()
+            };
+
+            right.Iterable.First().RemoveAt(0);
+            right.Iterable.First().Add(new ComplexWithId("Added", "New Value"));
+
+            var diff = DifferDotNet.Diff(left, right).ToArray();
+
+            Assert.Equivalent(2, diff.Length);
+            Assert.Null(diff[0].RightValue);
+            Assert.Null(diff[1].LeftValue);
+        }
+
+        [Fact]
         public void ComplexIterable_Diffs()
         {
             var complexFaker = new AutoFaker<ComplexType>();
@@ -483,11 +522,36 @@ namespace Differ.DotNet.Tests
             var left = faker.UseSeed(1).Generate();
             var right = faker.UseSeed(2).Generate();
 
-            right.NoDiff = left.NoDiff;
+            right.Sibling = left.Sibling;
 
             var diff = DifferDotNet.Diff(left, right);
 
             Assert.NotNull(diff.SingleOrDefault());
+        }
+
+        [Fact]
+        public void OptionalKeepDiff_IterableSimple_ChildChange_DoesNotIgnore()
+        {
+            var fakerComplex = new AutoFaker<ComplexOptionalKeepModel>();
+            var complexSet = fakerComplex.Generate(11);
+
+            var left = new IterableComplexOptionalKeepModel { Iterable = complexSet.Select(x => new ComplexOptionalKeepModel(x)).ToList() };
+            var right = new IterableComplexOptionalKeepModel { Iterable = complexSet.Select(x => new ComplexOptionalKeepModel(x)).ToList() };
+
+            // Update sibling
+            right.Iterable[1] = new ComplexOptionalKeepModel
+            {
+                KeepMeOnlyIfSiblingIsDiffed = right.Iterable[1].KeepMeOnlyIfSiblingIsDiffed,
+                Sibling = "Changed Sibling - keeps KeepMeOnlyIfSiblingIsDiffed"
+            };
+
+            // This is path x.1.string
+            // Optional keep must not return path.10.string
+            // Since we use trie and match "startWith" 1 != 10
+
+            var diff = DifferDotNet.Diff(left, right);
+
+            Assert.Equal(2, diff.Count());
         }
 
         [Fact]

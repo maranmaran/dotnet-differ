@@ -75,4 +75,30 @@ namespace Differ.DotNet.Tests.TestTypes
         public ICollection<ICollection<ComplexType>> CollectionGeneric { get; set; }
         public IDictionary<ComplexType, IDictionary<ComplexType, ComplexType>> DictionaryGeneric { get; set; }
     }
+
+    public class ComplexIterableWithId
+    {
+        [DiffArrayIdPropertyName("Id")]
+        public List<ComplexWithId> Iterable { get; set; }
+    }
+
+    public class ComplexNestedIterableWithId
+    {
+        [DiffArrayIdPropertyName("Id")]
+        public List<List<ComplexWithId>> Iterable { get; set; }
+    }
+
+    public record ComplexWithId
+    {
+        public ComplexWithId(string id, string value)
+        {
+            Id = id;
+            Value = value;
+        }
+
+        [IgnoreInDiff]
+        public string Id { get; set; }
+
+        public string Value { get; set; }
+    };
 }
