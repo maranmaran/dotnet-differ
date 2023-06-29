@@ -35,11 +35,11 @@ namespace Differ.DotNet
     /// </summary>
     [PublicAPI]
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class DiffArrayIdPropertyName : Attribute
+    public sealed class DiffCollectionId : Attribute
     {
         public string Name { get; }
 
-        public DiffArrayIdPropertyName(string name)
+        public DiffCollectionId(string name)
         {
             Name = name;
         }

@@ -78,13 +78,13 @@ namespace Differ.DotNet.Tests.TestTypes
 
     public class ComplexIterableWithId
     {
-        [DiffArrayIdPropertyName("Id")]
+        [DiffCollectionId("Id")]
         public List<ComplexWithId> Iterable { get; set; }
     }
 
     public class ComplexNestedIterableWithId
     {
-        [DiffArrayIdPropertyName("Id")]
+        [DiffCollectionId("Id")]
         public List<List<ComplexWithId>> Iterable { get; set; }
     }
 
