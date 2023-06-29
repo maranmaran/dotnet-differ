@@ -22,6 +22,7 @@ namespace Differ.DotNet
             var differences = DiffRecursive(
                 string.Empty,
                 string.Empty,
+                null,
                 typeof(T),
                 left,
                 right,
@@ -37,6 +38,7 @@ namespace Differ.DotNet
         private static DiffCollection DiffRecursive<T>(
             string path,
             string customPath,
+            PropertyInfo prop,
             Type type,
             T leftObj,
             T rightObj,
@@ -44,17 +46,17 @@ namespace Differ.DotNet
             DiffActions actions
         )
         {
-            if (HandleSimpleType(path, customPath, type, leftObj, rightObj, diffs, actions))
+            if (HandleSimpleType(path, customPath, prop, type, leftObj, rightObj, diffs, actions))
             {
                 return diffs;
             }
 
-            if (HandleIterable(path, customPath, type, leftObj, rightObj, diffs, actions))
+            if (HandleIterable(path, customPath, prop, type, leftObj, rightObj, diffs, actions))
             {
                 return diffs;
             }
 
-            HandleComplex(path, customPath, type, leftObj, rightObj, diffs, actions);
+            HandleComplex(path, customPath, prop, type, leftObj, rightObj, diffs, actions);
 
             return diffs;
         }
@@ -62,6 +64,7 @@ namespace Differ.DotNet
         private static bool HandleComplex<T>(
             string path,
             string customPath,
+            PropertyInfo curProp,
             Type type,
             T leftObj, T rightObj,
             DiffCollection diffs,
@@ -96,7 +99,7 @@ namespace Differ.DotNet
                 // Check for KeepInDiff attribute
                 if (prop.GetCustomAttribute<KeepInDiffAttribute>() is { } keepAtt)
                 {
-                    actions |= keepAtt.IgnoreIfNoOtherDiff
+                    actions |= keepAtt.IgnoreIfNoSiblingOrChildDiff
                         ? DiffActions.KeepOptional
                         : DiffActions.Keep;
                 }
@@ -105,6 +108,7 @@ namespace Differ.DotNet
                 DiffRecursive(
                     fullPath + ".",
                     customFullPath + ".",
+                    prop,
                     prop.PropertyType,
                     leftObj != null ? prop.GetValue(leftObj) : null,
                     rightObj != null ? prop.GetValue(rightObj) : null,
@@ -121,6 +125,7 @@ namespace Differ.DotNet
         private static bool HandleIterable<T>(
             string path,
             string customPath,
+            PropertyInfo prop,
             Type type,
             T leftObj, T rightObj,
             DiffCollection diffs,
@@ -134,7 +139,72 @@ namespace Differ.DotNet
 
             var leftArr = (leftObj as IEnumerable)?.GetEnumerator().ToArray() ?? Array.Empty<object>();
             var rightArr = (rightObj as IEnumerable)?.GetEnumerator().ToArray() ?? Array.Empty<object>();
+            var underlyingType = type.GetIterableType()
+                                 ?? leftArr.FirstOrDefault()?.GetType()
+                                 ?? rightArr.FirstOrDefault()?.GetType();
 
+            // Check for DiffArrayIdPropertyName attribute
+            PropertyInfo idProperty = null;
+            if (prop.GetCustomAttribute<DiffCollectionId>() is { } idAttr)
+            {
+                idProperty = underlyingType?.GetProperty(idAttr.Name);
+            }
+
+            // key based
+            if (idProperty != null)
+            {
+                var sortedL = leftArr.OrderBy(x => idProperty?.GetValue(x)).ToArray();
+                var sortedR = rightArr.OrderBy(x => idProperty?.GetValue(x)).ToArray();
+
+                var l = 0;
+                var r = 0;
+                while (l < sortedL.Length || r < sortedR.Length)
+                {
+                    var curL = l < sortedL.Length ? leftArr[l] : null;
+                    var curR = r < sortedR.Length ? rightArr[r] : null;
+
+                    var keyL = curL != null ? idProperty.GetValue(curL) : null;
+                    var keyR = curR != null ? idProperty.GetValue(curR) : null;
+
+                    if (keyL != keyR)
+                    {
+                        var nextIdx = curL != null ? l : r;
+                        var nextR = curL != null ? null : curR;
+
+                        DiffRecursive(
+                            path + $"{nextIdx}.",
+                            customPath + $"{nextIdx}.",
+                            prop,
+                            underlyingType,
+                            curL,
+                            nextR,
+                            diffs,
+                            actions
+                        );
+
+                        var _ = curL != null ? l++ : r++;
+                        continue;
+                    }
+
+                    DiffRecursive(
+                        path + $"{l}.",
+                        customPath + $"{l}.",
+                        prop,
+                        underlyingType,
+                        curL,
+                        curR,
+                        diffs,
+                        actions
+                    );
+
+                    l++;
+                    r++;
+                }
+
+                return true;
+            }
+
+            // index based
             for (var i = 0; i < Math.Max(leftArr.Length, rightArr.Length); i++)
             {
                 var curL = i < leftArr.Length ? leftArr[i] : null;
@@ -143,7 +213,8 @@ namespace Differ.DotNet
                 DiffRecursive(
                     path + $"{i}.",
                     customPath + $"{i}.",
-                    type.GetIterableType() ?? curL?.GetType() ?? curR?.GetType(),
+                    prop,
+                    underlyingType,
                     curL,
                     curR,
                     diffs,
@@ -157,6 +228,7 @@ namespace Differ.DotNet
         private static bool HandleSimpleType<T>(
             string path,
             string customPath,
+            PropertyInfo prop,
             Type type,
             T leftObj, T rightObj,
             DiffCollection diffs,

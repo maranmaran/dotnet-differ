@@ -18,7 +18,7 @@ namespace Differ.DotNet
         ///     If <c>true</c> attribute is ignored (not kept), if no sibling or child diffs exist.
         ///     If <c>false</c> values are always kept.
         /// </value>
-        public bool IgnoreIfNoOtherDiff { get; set; }
+        public bool IgnoreIfNoSiblingOrChildDiff { get; set; }
     }
 
     /// <summary>
@@ -28,6 +28,21 @@ namespace Differ.DotNet
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class IgnoreInDiffAttribute : Attribute
     {
+    }
+
+    /// <summary>
+    /// Switches array diffing from index based to key-value based
+    /// </summary>
+    [PublicAPI]
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class DiffCollectionId : Attribute
+    {
+        public string Name { get; }
+
+        public DiffCollectionId(string name)
+        {
+            Name = name;
+        }
     }
 
     /// <summary>
@@ -52,7 +67,7 @@ namespace Differ.DotNet
         Default = 0,
         Keep = 1,
         Ignore = 2,
-        KeepOptional = 4,
+        KeepOptional = 4
     }
 
     internal sealed class DiffCollection

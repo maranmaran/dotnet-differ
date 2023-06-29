@@ -36,7 +36,7 @@ namespace Differ.DotNet.Tests.TestTypes
 
     public class SimpleOptionalKeepModel
     {
-        [KeepInDiff(IgnoreIfNoOtherDiff = true)]
+        [KeepInDiff(IgnoreIfNoSiblingOrChildDiff = true)]
         public string NoDiffKeepMe { get; set; }
 
         public string NoDiff { get; set; }
@@ -44,9 +44,24 @@ namespace Differ.DotNet.Tests.TestTypes
 
     public class ComplexOptionalKeepModel
     {
-        [KeepInDiff(IgnoreIfNoOtherDiff = true)]
-        public ComplexType NoDiffKeepMe { get; set; }
+        public ComplexOptionalKeepModel()
+        {
+        }
 
-        public ComplexType NoDiff { get; set; }
+        public ComplexOptionalKeepModel(ComplexOptionalKeepModel a)
+        {
+            KeepMeOnlyIfSiblingIsDiffed = a.KeepMeOnlyIfSiblingIsDiffed;
+            Sibling = a.Sibling;
+        }
+
+        [KeepInDiff(IgnoreIfNoSiblingOrChildDiff = true)]
+        public string KeepMeOnlyIfSiblingIsDiffed { get; set; }
+
+        public string Sibling { get; set; }
+    }
+
+    public class IterableComplexOptionalKeepModel
+    {
+        public List<ComplexOptionalKeepModel> Iterable { get; set; }
     }
 }
