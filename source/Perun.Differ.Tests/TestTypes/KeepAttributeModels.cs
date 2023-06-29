@@ -33,4 +33,20 @@ namespace Differ.DotNet.Tests.TestTypes
 
         public ComplexType NoDiff { get; set; }
     }
+
+    public class SimpleOptionalKeepModel
+    {
+        [KeepInDiff(IgnoreIfNoOtherDiff = true)]
+        public string NoDiffKeepMe { get; set; }
+
+        public string NoDiff { get; set; }
+    }
+
+    public class ComplexOptionalKeepModel
+    {
+        [KeepInDiff(IgnoreIfNoOtherDiff = true)]
+        public ComplexType NoDiffKeepMe { get; set; }
+
+        public ComplexType NoDiff { get; set; }
+    }
 }

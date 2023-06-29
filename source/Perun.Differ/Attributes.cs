@@ -11,6 +11,14 @@ namespace Differ.DotNet
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class KeepInDiffAttribute : Attribute
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether attribute should be ignored if sibling or child diffs exist.
+        /// </summary>
+        /// <value>
+        ///     If <c>true</c> attribute is ignored (not kept), if no sibling or child diffs exist.
+        ///     If <c>false</c> values are always kept.
+        /// </value>
+        public bool IgnoreIfNoOtherDiff { get; set; }
     }
 
     /// <summary>
@@ -43,16 +51,15 @@ namespace Differ.DotNet
     {
         Default = 0,
         Keep = 1,
-        Ignore = 2
+        Ignore = 2,
+        KeepOptional = 4,
     }
 
     internal sealed class DiffCollection
     {
-        public Dictionary<string, Difference> Diffs { get; set; } = new Dictionary<string, Difference>();
+        public Dictionary<string, Difference> Diffs { get; set; } = new(); // (FullPath, Diff)
 
-        public List<Difference> KeepDiffs { get; set; } = new List<Difference>();
-        public HashSet<string> KeepPaths { get; set; } = new HashSet<string>();
-
-        public HashSet<string> IgnorePaths { get; set; } = new HashSet<string>();
+        public HashSet<Difference> KeepDiffs { get; set; } = new();
+        public HashSet<string> IgnorePaths { get; set; } = new(); // FullPath
     }
 }

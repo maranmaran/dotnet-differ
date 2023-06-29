@@ -49,5 +49,11 @@ namespace Differ.DotNet
 
             return (fullPath, fieldName, fieldPath);
         }
+
+        /// assembly internals
+
+        internal bool IgnoreIfNoOtherDiff { get; set; }
+        internal bool Keep { get; set; }
+        internal bool Ignore { get; set; }
     }
 }
