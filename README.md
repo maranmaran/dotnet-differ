@@ -4,9 +4,9 @@
   <img src="https://raw.githubusercontent.com/maranmaran/differ-dotnet/main/banner.png" />
 </p>
 
-Differ.DotNet is diffing library for custom types and objects.
+Differ.DotNet is a diffing library for custom types and objects.
 
-Get a list of differences of your instances quickly with flexibility to specify custom property names, what to keep or ignore in your difference and make your change observation features easier.
+Get a list of differences in your instances quickly with the flexibility to specify custom property names, what to keep or ignore in your difference and make your change observation features easier.
 
 # Installation
 
@@ -80,7 +80,7 @@ Output
 ]
 ```
 
-Keep in diff has optional property `IgnoreIfNoSiblingOrChildDiff` which will actually ignore keep attribute if there's no sibling or child diff present rendering it unusable or not desired as it's extra information without some other context.
+Keep in diff has optional property `IgnoreIfNoSiblingOrChildDiff` which will actually ignore the keep attribute if there's no sibling or child diff present rendering it unusable or not desired as it's extra information without some other context.
 
 ## IgnoreInDiff attribute
 
@@ -98,7 +98,7 @@ IEnumerable<Difference> carDiff = DifferDotNet.Diff(car1, car2);
 
 # Keep and Ignore attribute strength:
 
-More nested attributes have bigger strength than parent ones.
+More nested attributes have bigger strengths than parent ones.
 This means that if you define `IgnoreInDiff` on root property, but `KeepInDiff` child property or **reverse**, expect that child property attribute to override parent one.
 
 ## DiffPropertyName attribute
@@ -134,9 +134,9 @@ Output
 ## DiffCollectionId attribute
 
 Switches default index-based diffing to key-value diff.
-Nested types and values in the collection return their keys which is used to detect changes.
+Nested types and values in the collection return their keys which are used to detect changes.
 
-Say we have 3 items in an array and we remove first item:
+Say we have 3 items in an array and we remove the first item:
 
 With index-based matching
 
@@ -150,7 +150,7 @@ Diff will be:
 car -> bike
 road -> null
 
-Because due to removal, items moved in array and indexes changed.
+Because due to removal, items moved in the array and indexes changed.
 
 With key-based matching by defining DiffCollectionId of underlying object:
 
@@ -162,15 +162,6 @@ With key-based matching by defining DiffCollectionId of underlying object:
 
 Diff will be:
 car -> null
-
-```cs
-class Car([property:DiffPropertyName("Make")]string Model);
-
-Car car1 = new Car("Toyota");
-Car car2 = new Car("Ford");
-
-IEnumerable<Difference> carDiff = DifferDotNet.Diff(car1, car2);
-```
 
 # Full demo
 
