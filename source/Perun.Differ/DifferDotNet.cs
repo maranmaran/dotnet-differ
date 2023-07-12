@@ -145,7 +145,7 @@ namespace Differ.DotNet
 
             // Check for DiffArrayIdPropertyName attribute
             PropertyInfo idProperty = null;
-            if (prop.GetCustomAttribute<DiffCollectionId>() is { } idAttr)
+            if (prop != null && prop.GetCustomAttribute<DiffCollectionId>() is { } idAttr)
             {
                 idProperty = underlyingType?.GetProperty(idAttr.Name);
             }
