@@ -54,7 +54,15 @@ namespace Differ.DotNet
     public sealed class DiffPropertyName : Attribute
     {
         public string Name { get; }
-        public bool FromProperty { get; set; }
+
+        /// <summary>
+        /// Attempts to retrieve value from property via reflection
+        /// </summary>
+        /// <example>
+        ///     Name: B.B.B
+        ///     Takes value from B.B.B nested path
+        /// </example>
+        public bool FromPropertyValue { get; set; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DiffPropertyName"/> class.
@@ -62,13 +70,13 @@ namespace Differ.DotNet
         /// <param name="name">
         ///     Custom name
         /// </param>
-        /// <param name="fromProperty">
-        ///     Tries to fetch via reflection treating first parameter (name) as path
+        /// <param name="fromPropertyValue">
+        ///     Tries to fetch value via reflection, treating Name as path
         /// </param>
-        public DiffPropertyName(string name, bool fromProperty = false)
+        public DiffPropertyName(string name, bool fromPropertyValue = false)
         {
             Name = name;
-            FromProperty = fromProperty;
+            FromPropertyValue = fromPropertyValue;
         }
     }
 

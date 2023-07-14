@@ -679,6 +679,19 @@ namespace Differ.DotNet.Tests
         }
 
         [Fact]
+        public void CustomNameDefined_Reflection_RegisteredInDiff()
+        {
+            var faker = new AutoFaker<CustomNameReflectionModel>();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
+
+            var diff = DifferDotNet.Diff(left, right).Single();
+
+            Assert.Equal(left.B, diff.CustomFieldName);
+            Assert.Equal("a", diff.FieldName);
+        }
+
+        [Fact]
         public void CustomNameDefined_RegisteredInDiff()
         {
             var faker = new AutoFaker<CustomNameModel>();
@@ -706,6 +719,42 @@ namespace Differ.DotNet.Tests
 
             Assert.Equal("b.a", diff.FullPath);
             Assert.Equal("b", diff.FieldPath);
+            Assert.Equal("a", diff.FieldName);
+        }
+
+        [Fact]
+        public void NestedCustomNameDefined_Reflection_RegisteredInDiff()
+        {
+            var faker = new AutoFaker<CustomNameNestedReflectionModel>();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
+
+            var diff = DifferDotNet.Diff(left, right).Single();
+
+            Assert.Equal("MyCustomName.ACustomName", diff.CustomFullPath);
+            Assert.Equal("MyCustomName", diff.CustomFieldPath);
+            Assert.Equal("ACustomName", diff.CustomFieldName);
+
+            Assert.Equal("b.a", diff.FullPath);
+            Assert.Equal("b", diff.FieldPath);
+            Assert.Equal("a", diff.FieldName);
+        }
+
+        [Fact]
+        public void DeepNestedCustomNameDefined_Reflection_RegisteredInDiff()
+        {
+            var faker = new AutoFaker<CustomNameDeepNestedReflectionModel>();
+            var left = faker.UseSeed(1).Generate();
+            var right = faker.UseSeed(2).Generate();
+
+            var diff = DifferDotNet.Diff(left, right).Single();
+
+            Assert.Equal("MyCustomName.MyCustomName.ACustomName", diff.CustomFullPath);
+            Assert.Equal("MyCustomName.MyCustomName", diff.CustomFieldPath);
+            Assert.Equal("ACustomName", diff.CustomFieldName);
+
+            Assert.Equal("b.b.a", diff.FullPath);
+            Assert.Equal("b.b", diff.FieldPath);
             Assert.Equal("a", diff.FieldName);
         }
     }
