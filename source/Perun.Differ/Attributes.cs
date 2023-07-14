@@ -54,10 +54,21 @@ namespace Differ.DotNet
     public sealed class DiffPropertyName : Attribute
     {
         public string Name { get; }
+        public bool FromProperty { get; set; }
 
-        public DiffPropertyName(string name)
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DiffPropertyName"/> class.
+        /// </summary>
+        /// <param name="name">
+        ///     Custom name
+        /// </param>
+        /// <param name="fromProperty">
+        ///     Tries to fetch via reflection treating first parameter (name) as path
+        /// </param>
+        public DiffPropertyName(string name, bool fromProperty = false)
         {
             Name = name;
+            FromProperty = fromProperty;
         }
     }
 
