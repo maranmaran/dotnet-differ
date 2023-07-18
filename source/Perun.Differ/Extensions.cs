@@ -50,12 +50,12 @@ namespace Differ.DotNet
 
         internal static bool IsIterable(this Type type)
         {
-            if (type.IsArray || type == typeof(IEnumerable) || type.GetInterfaces().Contains(typeof(IEnumerable)))
+            if (type == typeof(string))
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return type.IsArray || type == typeof(IEnumerable) || type.GetInterfaces().Contains(typeof(IEnumerable));
         }
 
         internal static Type GetIterableType(this Type type)

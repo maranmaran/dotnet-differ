@@ -55,9 +55,28 @@ namespace Differ.DotNet
     {
         public string Name { get; }
 
-        public DiffPropertyName(string name)
+        /// <summary>
+        /// Attempts to retrieve value from property via reflection
+        /// </summary>
+        /// <example>
+        ///     Name: B.B.B
+        ///     Takes value from B.B.B nested path
+        /// </example>
+        public bool FromPropertyValue { get; set; }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DiffPropertyName"/> class.
+        /// </summary>
+        /// <param name="name">
+        ///     Custom name
+        /// </param>
+        /// <param name="fromPropertyValue">
+        ///     Tries to fetch value via reflection, treating Name as path
+        /// </param>
+        public DiffPropertyName(string name, bool fromPropertyValue = false)
         {
             Name = name;
+            FromPropertyValue = fromPropertyValue;
         }
     }
 

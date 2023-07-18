@@ -131,6 +131,37 @@ Output
 ]
 ```
 
+By turning on flag `FromPropertyValue` differ will attempt to retireve value via reflection treating given name as PATH.
+
+```cs
+class Car([property:DiffPropertyName("Company", true)]string Model, string Company);
+
+Car car1 = new Car("Supra", "Toyota");
+Car car2 = new Car("Corolla", "Toyota");
+
+IEnumerable<Difference> carDiff = DifferDotNet.Diff(car1, car2);
+```
+
+Output
+
+```
+[
+  {
+    "fullPath": "model",
+    "fieldPath": "",
+    "fieldName": "model",
+    "leftValue": "Toyota",
+    "rightValue": "Corolla",
+    "customFullPath": "Toyota", <-- taken from Company prop
+    "customFieldPath": "",
+    "customFieldName": "Toyota" <-- taken from Company prop
+  }
+]
+```
+
+This can also be nested path like: `Company.Name`
+Iterables are not supported. Default return value is `Name` value of the `DiffPropertyName` attribute 
+
 ## DiffCollectionId attribute
 
 Switches default index-based diffing to key-value diff.

@@ -80,7 +80,7 @@ namespace Differ.DotNet
             foreach (var prop in type.GetProperties())
             {
                 var name = prop.Name.ToCamelCase();
-                var customName = (prop.GetCustomAttribute<DiffPropertyName>()?.Name ?? name);
+                var customName = GetCustomPropertyName<T>(type, rightObj, leftObj, prop) ?? name;
 
                 var fullPath = path + name;
                 var customFullPath = customPath + customName;
@@ -120,6 +120,44 @@ namespace Differ.DotNet
             }
 
             return true;
+        }
+
+        private static string GetCustomPropertyName<T>(Type type, T left, T right, PropertyInfo prop)
+        {
+            var attr = prop?.GetCustomAttribute<DiffPropertyName>();
+            if (attr is null)
+            {
+                return null;
+            }
+
+            var segments = attr.Name.Split('.');
+            var nestedProp = prop;
+            var nestedType = type;
+            object nestedLeft = left;
+            object nestedRight = right;
+
+            for (var i = 0; i < segments.Length; i++)
+            {
+                nestedProp = nestedType?.GetProperty(segments[i]);
+                if (nestedProp is null)
+                {
+                    return attr.Name;
+                }
+
+                nestedType = nestedProp.PropertyType;
+                if (nestedType.IsIterable())
+                {
+                    return attr.Name;
+                }
+
+                if (i < segments.Length - 1)
+                {
+                    nestedLeft = nestedProp.GetValue(nestedLeft);
+                    nestedRight = nestedProp.GetValue(nestedRight);
+                }
+            }
+
+            return (nestedProp.GetValue(nestedRight) ?? nestedProp.GetValue(nestedLeft))?.ToString();
         }
 
         private static bool HandleIterable<T>(
