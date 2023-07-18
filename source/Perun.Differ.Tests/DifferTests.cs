@@ -70,33 +70,36 @@ namespace Differ.DotNet.Tests
         [Fact]
         public void Nulls_Diffs()
         {
-            var entity = new AutoFaker<SimpleTypes>().UseSeed(1).Generate();
-            var entity2 = new AutoFaker<ComplexType>().UseSeed(1).Generate();
-            var entity3 = new AutoFaker<SimpleIterableTypes>().UseSeed(1).Generate();
-            var entity4 = new AutoFaker<ComplexIterableTypes>().UseSeed(1).Generate();
-
             var diffsNone = DifferDotNet.Diff<SimpleTypes>(null, null).ToList();
             Assert.Empty(diffsNone);
 
+            var entity = new AutoFaker<SimpleTypes>().UseSeed(1).Generate();
             var diffsRight = DifferDotNet.Diff(null, entity).ToList();
             var diffsLeft = DifferDotNet.Diff(entity, null).ToList();
             Assert.NotEmpty(diffsRight);
             Assert.NotEmpty(diffsLeft);
 
+            var entity2 = new AutoFaker<ComplexType>().UseSeed(1).Generate();
             diffsRight = DifferDotNet.Diff(null, entity2).ToList();
             diffsLeft = DifferDotNet.Diff(entity2, null).ToList();
             Assert.NotEmpty(diffsRight);
             Assert.NotEmpty(diffsLeft);
 
+            var entity3 = new AutoFaker<SimpleIterableTypes>().UseSeed(1).Generate();
             diffsRight = DifferDotNet.Diff(null, entity3).ToList();
             diffsLeft = DifferDotNet.Diff(entity3, null).ToList();
             Assert.NotEmpty(diffsRight);
             Assert.NotEmpty(diffsLeft);
 
+            var entity4 = new AutoFaker<ComplexIterableTypes>().UseSeed(1).Generate();
             diffsRight = DifferDotNet.Diff(null, entity4).ToList();
             diffsLeft = DifferDotNet.Diff(entity4, null).ToList();
             Assert.NotEmpty(diffsRight);
             Assert.NotEmpty(diffsLeft);
+
+            entity4 = new ComplexIterableTypes { Array = null };
+            diffsNone = DifferDotNet.Diff(entity4, entity4).ToList();
+            Assert.Empty(diffsNone);
         }
 
         [Fact]
@@ -689,6 +692,20 @@ namespace Differ.DotNet.Tests
 
             Assert.Equal(left.B, diff.CustomFieldName);
             Assert.Equal("a", diff.FieldName);
+        }
+
+        [Fact]
+        public void CustomNameDefined_Reflection_NullInstance_ReturnsDiff()
+        {
+            var faker = new AutoFaker<CustomNameNullValueReflectionModelNested>();
+            var faker2 = new AutoFaker<CustomNameNullValueReflectionModel>();
+
+            var left = new CustomNameNullValueReflectionModelNested() { Items = null };
+            var right = faker.UseSeed(2).Generate();
+
+            var diff = DifferDotNet.Diff(left, right);
+
+            Assert.NotEmpty(diff);
         }
 
         [Fact]

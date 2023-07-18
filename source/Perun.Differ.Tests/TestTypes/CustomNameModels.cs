@@ -1,4 +1,6 @@
-﻿namespace Differ.DotNet.Tests.TestTypes
+﻿using System.Collections.Generic;
+
+namespace Differ.DotNet.Tests.TestTypes
 {
     internal class CustomNameModel
     {
@@ -14,6 +16,19 @@
         public string A { get; set; }
 
         public string B => "MyCustomName";
+    }
+
+    internal class CustomNameNullValueReflectionModel
+    {
+        [DiffPropertyName("B", fromPropertyValue: true)]
+        public double? A { get; set; }
+
+        public string B => "MyCustomName";
+    }
+
+    internal class CustomNameNullValueReflectionModelNested
+    {
+        public List<CustomNameNullValueReflectionModel> Items { get; set; }
     }
 
     internal class CustomNameNestedModel
