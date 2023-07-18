@@ -130,6 +130,11 @@ namespace Differ.DotNet
                 return null;
             }
 
+            if (attr.FromPropertyValue == false)
+            {
+                return attr.Name;
+            }
+
             var segments = attr.Name.Split('.');
             var nestedProp = prop;
             var nestedType = type;
@@ -152,12 +157,20 @@ namespace Differ.DotNet
 
                 if (i < segments.Length - 1)
                 {
-                    nestedLeft = nestedProp.GetValue(nestedLeft);
-                    nestedRight = nestedProp.GetValue(nestedRight);
+                    nestedLeft = TryGetValue(nestedProp, nestedLeft);
+                    nestedRight = TryGetValue(nestedProp, nestedRight);
                 }
             }
 
-            return (nestedProp.GetValue(nestedRight) ?? nestedProp.GetValue(nestedLeft))?.ToString();
+            var customName = (TryGetValue(nestedProp, nestedRight) ?? TryGetValue(nestedProp, nestedLeft))?.ToString();
+
+            return customName ?? attr.Name;
+        }
+
+        [CanBeNull]
+        private static object TryGetValue(PropertyInfo prop, object obj)
+        {
+            return obj is not null ? prop.GetValue(obj) : null;
         }
 
         private static bool HandleIterable<T>(
