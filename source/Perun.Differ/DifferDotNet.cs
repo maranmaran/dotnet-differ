@@ -217,7 +217,7 @@ namespace Differ.DotNet
                     var keyL = curL != null ? idProperty.GetValue(curL) : null;
                     var keyR = curR != null ? idProperty.GetValue(curR) : null;
 
-                    if (keyL != keyR)
+                    if (!Equals(keyL, keyR))
                     {
                         var nextIdx = curL != null ? l : r;
                         var nextR = curL != null ? null : curR;

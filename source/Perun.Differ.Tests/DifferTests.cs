@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using AutoBogus;
 using Differ.DotNet.Tests.TestTypes;
 using Microsoft.VisualBasic;
@@ -287,6 +288,49 @@ namespace Differ.DotNet.Tests
             Assert.Equivalent(2, diff.Length);
             Assert.Null(diff[0].RightValue);
             Assert.Null(diff[1].LeftValue);
+        }
+
+        [Fact]
+        public void ComplexNestedIterable_ListIdDefined_MutateArray_DeleteDiffRatherThanUpdateDiff()
+        {
+            var faker = new AutoFaker<ComplexWithId>();
+
+            var left = new ComplexIterableWithId
+            {
+                Iterable = faker.Generate(10)
+            };
+
+            var right = new ComplexIterableWithId
+            {
+                Iterable = left.Iterable.Select(x => new ComplexWithId(x.Id, x.Value)).ToList()
+            };
+
+            right.Iterable.RemoveAt(5);
+            right.Iterable.RemoveAt(0);
+            right.Iterable.Add(faker.Generate());
+
+            var diff = DifferDotNet.Diff(left, right).ToArray();
+
+            Assert.Equivalent(3, diff.Length);
+        }
+
+        [Fact]
+        public void ComplexDeeplyNestedIterableWithId()
+        {
+            var faker = new AutoFaker<ComplexDeeplyNestedIterableWithId>();
+            var faker2 = new AutoFaker<ComplexDeeplyNestedIterableWithId.Level1>();
+
+            var left = faker.Generate();
+            var right = JsonSerializer.Deserialize<ComplexDeeplyNestedIterableWithId>(JsonSerializer.Serialize(left));
+
+            right.Iterable[0].Iterable.RemoveAt(0); // 3 changes
+            right.Iterable[1].Iterable.RemoveAt(1); // 3 changes
+            right.Iterable[2].Iterable.RemoveAt(2); // 3 changes
+            right.Iterable.Add(faker2.Generate());  // 3*3 changes
+
+            var diff = DifferDotNet.Diff(left, right).ToArray();
+
+            Assert.Equivalent(3 + 3 + 3 + 3 * 3, diff.Length);
         }
 
         [Fact]

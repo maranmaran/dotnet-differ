@@ -88,6 +88,30 @@ namespace Differ.DotNet.Tests.TestTypes
         public List<List<ComplexWithId>> Iterable { get; set; }
     }
 
+    public class ComplexDeeplyNestedIterableWithId
+    {
+        [DiffCollectionId("IdLevel1")]
+        public List<Level1> Iterable { get; set; }
+
+        public class Level1
+        {
+            [IgnoreInDiff]
+            public string IdLevel1 { get; set; }
+
+            [DiffCollectionId("IdLevel2")]
+            public List<Level2> Iterable { get; set; }
+        }
+
+        public class Level2
+        {
+            [IgnoreInDiff]
+            public string IdLevel2 { get; set; }
+
+            [DiffCollectionId("Id")]
+            public List<ComplexWithId> Iterable { get; set; }
+        }
+    }
+
     public record ComplexWithId
     {
         public ComplexWithId(string id, string value)
