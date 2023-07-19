@@ -204,42 +204,27 @@ namespace Differ.DotNet
             // key based
             if (idProperty != null)
             {
-                var sortedL = leftArr.OrderBy(x => idProperty?.GetValue(x)).ToArray();
-                var sortedR = rightArr.OrderBy(x => idProperty?.GetValue(x)).ToArray();
+                var leftMap = leftArr.ToDictionary(idProperty.GetValue);
+                var rightMap = rightArr.ToDictionary(idProperty.GetValue);
 
-                var l = 0;
-                var r = 0;
-                while (l < sortedL.Length || r < sortedR.Length)
+                var mapPairs = leftMap.Concat(rightMap).GroupBy(x => x.Key)
+                    .ToDictionary(
+                        x => x.Key,
+                        x => (
+                            Left: leftMap.ContainsKey(x.Key) ? leftMap[x.Key] : null,
+                            Right: rightMap.ContainsKey(x.Key) ? rightMap[x.Key] : null
+                        )
+                    );
+
+                for (var i = 0; i < mapPairs.Count; i++)
                 {
-                    var curL = l < sortedL.Length ? leftArr[l] : null;
-                    var curR = r < sortedR.Length ? rightArr[r] : null;
-
-                    var keyL = curL != null ? idProperty.GetValue(curL) : null;
-                    var keyR = curR != null ? idProperty.GetValue(curR) : null;
-
-                    if (!Equals(keyL, keyR))
-                    {
-                        var nextIdx = curL != null ? l : r;
-                        var nextR = curL != null ? null : curR;
-
-                        DiffRecursive(
-                            path + $"{nextIdx}.",
-                            customPath + $"{nextIdx}.",
-                            prop,
-                            underlyingType,
-                            curL,
-                            nextR,
-                            diffs,
-                            actions
-                        );
-
-                        var _ = curL != null ? l++ : r++;
-                        continue;
-                    }
+                    var pair = mapPairs.ElementAt(i);
+                    var curL = pair.Value.Left;
+                    var curR = pair.Value.Right;
 
                     DiffRecursive(
-                        path + $"{l}.",
-                        customPath + $"{l}.",
+                        path + $"{i}.",
+                        customPath + $"{i}.",
                         prop,
                         underlyingType,
                         curL,
@@ -247,9 +232,6 @@ namespace Differ.DotNet
                         diffs,
                         actions
                     );
-
-                    l++;
-                    r++;
                 }
 
                 return true;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using AutoBogus;
@@ -293,7 +294,8 @@ namespace Differ.DotNet.Tests
         [Fact]
         public void ComplexNestedIterable_ListIdDefined_MutateArray_DeleteDiffRatherThanUpdateDiff()
         {
-            var faker = new AutoFaker<ComplexWithId>();
+            var faker = new AutoFaker<ComplexWithId>()
+                .RuleForType(typeof(string), f => Guid.NewGuid().ToString());
 
             var left = new ComplexIterableWithId
             {
@@ -317,8 +319,11 @@ namespace Differ.DotNet.Tests
         [Fact]
         public void ComplexDeeplyNestedIterableWithId()
         {
-            var faker = new AutoFaker<ComplexDeeplyNestedIterableWithId>();
-            var faker2 = new AutoFaker<ComplexDeeplyNestedIterableWithId.Level1>();
+            var faker = new AutoFaker<ComplexDeeplyNestedIterableWithId>()
+                .RuleForType(typeof(string), f => Guid.NewGuid().ToString());
+
+            var faker2 = new AutoFaker<ComplexDeeplyNestedIterableWithId.Level1>()
+                .RuleForType(typeof(string), f => Guid.NewGuid().ToString());
 
             var left = faker.Generate();
             var right = JsonSerializer.Deserialize<ComplexDeeplyNestedIterableWithId>(JsonSerializer.Serialize(left));
