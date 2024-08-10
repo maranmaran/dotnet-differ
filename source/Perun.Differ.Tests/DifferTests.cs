@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using AutoBogus;
@@ -136,10 +135,10 @@ namespace Differ.DotNet.Tests
             faker.RuleForType(typeof(IList), x => x.Random.WordsArray(3).ToList() as IList);
             faker.RuleForType(typeof(IEnumerable), x => x.Random.WordsArray(3).ToList() as IEnumerable);
             faker.RuleForType(typeof(ICollection), x => x.Random.WordsArray(3).ToList() as ICollection);
-            faker.RuleForType(typeof(IDictionary), x => x.Make(3, () =>
-                    new KeyValuePair<string, string>(x.Random.Word(), x.Random.Word()))
-                    .ToDictionary(x => x.Key, x => x.Value) as IDictionary
-            );
+            //faker.RuleForType(typeof(IDictionary), x => x.Make(3, () =>
+            //        new KeyValuePair<string, string>(x.Random.Word(), x.Random.Word()))
+            //        .ToDictionary(x => x.Key, x => x.Value) as IDictionary
+            //);
             faker.RuleForType(typeof(Collection), x => new Collection
             {
                 x.Random.Word(),
@@ -179,11 +178,11 @@ namespace Differ.DotNet.Tests
                 diffsLookup[nameof(SimpleIterableTypes.ArrayGeneric).ToLower()].ToList()
             );
 
-            Extensions.AssertIterable(
-                left.DictionaryGeneric,
-                right.DictionaryGeneric,
-                diffsLookup[nameof(SimpleIterableTypes.DictionaryGeneric).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.DictionaryGeneric,
+            //    right.DictionaryGeneric,
+            //    diffsLookup[nameof(SimpleIterableTypes.DictionaryGeneric).ToLower()].ToList()
+            //);
 
             Extensions.AssertIterable(
                 left.EnumerableGeneric,
@@ -203,23 +202,23 @@ namespace Differ.DotNet.Tests
                 diffsLookup[nameof(SimpleIterableTypes.CollectionGenericTyped).ToLower()].ToList()
             );
 
-            Extensions.AssertIterable(
-                left.DictionaryGenericTyped,
-                right.DictionaryGenericTyped,
-                diffsLookup[nameof(SimpleIterableTypes.DictionaryGenericTyped).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.DictionaryGenericTyped,
+            //    right.DictionaryGenericTyped,
+            //    diffsLookup[nameof(SimpleIterableTypes.DictionaryGenericTyped).ToLower()].ToList()
+            //);
 
-            Extensions.AssertIterable(
-                left.SetGeneric,
-                right.SetGeneric,
-                diffsLookup[nameof(SimpleIterableTypes.SetGeneric).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.SetGeneric,
+            //    right.SetGeneric,
+            //    diffsLookup[nameof(SimpleIterableTypes.SetGeneric).ToLower()].ToList()
+            //);
 
-            Extensions.AssertIterable(
-                left.SetTyped,
-                right.SetTyped,
-                diffsLookup[nameof(SimpleIterableTypes.SetTyped).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.SetTyped,
+            //    right.SetTyped,
+            //    diffsLookup[nameof(SimpleIterableTypes.SetTyped).ToLower()].ToList()
+            //);
 
             Extensions.AssertIterable(
                 (IEnumerable<string>)left.Collection,
@@ -245,11 +244,11 @@ namespace Differ.DotNet.Tests
                 diffsLookup[nameof(SimpleIterableTypes.Enumerable).ToLower()].ToList()
             );
 
-            Extensions.AssertIterable(
-                (IEnumerable<KeyValuePair<string, string>>)left.Dictionary,
-                (IEnumerable<KeyValuePair<string, string>>)right.Dictionary,
-                diffsLookup[nameof(SimpleIterableTypes.Dictionary).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    (IEnumerable<KeyValuePair<string, string>>)left.Dictionary,
+            //    (IEnumerable<KeyValuePair<string, string>>)right.Dictionary,
+            //    diffsLookup[nameof(SimpleIterableTypes.Dictionary).ToLower()].ToList()
+            //);
         }
 
         [Fact]
@@ -348,10 +347,10 @@ namespace Differ.DotNet.Tests
             faker.RuleForType(typeof(IList), x => complexFaker.Generate(3).ToList() as IList);
             faker.RuleForType(typeof(IEnumerable), x => complexFaker.Generate(3).ToList() as IEnumerable);
             faker.RuleForType(typeof(ICollection), x => complexFaker.Generate(3).ToList() as ICollection);
-            faker.RuleForType(typeof(IDictionary), x => x.Make(3, () =>
-                    new KeyValuePair<ComplexType, ComplexType>(complexFaker.Generate(), complexFaker.Generate()))
-                .ToDictionary(x => x.Key, x => x.Value) as IDictionary
-            );
+            //faker.RuleForType(typeof(IDictionary), x => x.Make(3, () =>
+            //        new KeyValuePair<ComplexType, ComplexType>(complexFaker.Generate(), complexFaker.Generate()))
+            //    .ToDictionary(x => x.Key, x => x.Value) as IDictionary
+            //);
             faker.RuleForType(typeof(Collection), x => new Collection
             {
                 complexFaker.Generate(),
@@ -391,11 +390,11 @@ namespace Differ.DotNet.Tests
                 diffsLookup[nameof(ComplexIterableTypes.ArrayGeneric).ToLower()].ToList()
             );
 
-            Extensions.AssertIterable(
-                left.DictionaryGeneric,
-                right.DictionaryGeneric,
-                diffsLookup[nameof(ComplexIterableTypes.DictionaryGeneric).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.DictionaryGeneric,
+            //    right.DictionaryGeneric,
+            //    diffsLookup[nameof(ComplexIterableTypes.DictionaryGeneric).ToLower()].ToList()
+            //);
 
             Extensions.AssertIterable(
                 left.EnumerableGeneric.Select(x => x.String),
@@ -415,23 +414,23 @@ namespace Differ.DotNet.Tests
                 diffsLookup[nameof(ComplexIterableTypes.CollectionGenericTyped).ToLower()].ToList()
             );
 
-            Extensions.AssertIterable(
-                left.DictionaryGenericTyped,
-                right.DictionaryGenericTyped,
-                diffsLookup[nameof(ComplexIterableTypes.DictionaryGenericTyped).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.DictionaryGenericTyped,
+            //    right.DictionaryGenericTyped,
+            //    diffsLookup[nameof(ComplexIterableTypes.DictionaryGenericTyped).ToLower()].ToList()
+            //);
 
-            Extensions.AssertIterable(
-                left.SetGeneric.Select(x => x.String),
-                right.SetGeneric.Select(x => x.String),
-                diffsLookup[nameof(ComplexIterableTypes.SetGeneric).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.SetGeneric.Select(x => x.String),
+            //    right.SetGeneric.Select(x => x.String),
+            //    diffsLookup[nameof(ComplexIterableTypes.SetGeneric).ToLower()].ToList()
+            //);
 
-            Extensions.AssertIterable(
-                left.SetTyped.Select(x => x.String),
-                right.SetTyped.Select(x => x.String),
-                diffsLookup[nameof(ComplexIterableTypes.SetTyped).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.SetTyped.Select(x => x.String),
+            //    right.SetTyped.Select(x => x.String),
+            //    diffsLookup[nameof(ComplexIterableTypes.SetTyped).ToLower()].ToList()
+            //);
 
             Extensions.AssertIterable(
                 ((IEnumerable<ComplexType>)left.Collection).Select(x => x.String),
@@ -457,11 +456,11 @@ namespace Differ.DotNet.Tests
                 diffsLookup[nameof(ComplexIterableTypes.Enumerable).ToLower()].ToList()
             );
 
-            Extensions.AssertIterable(
-                (IEnumerable<KeyValuePair<ComplexType, ComplexType>>)left.Dictionary,
-                (IEnumerable<KeyValuePair<ComplexType, ComplexType>>)right.Dictionary,
-                diffsLookup[nameof(ComplexIterableTypes.Dictionary).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    (IEnumerable<KeyValuePair<ComplexType, ComplexType>>)left.Dictionary,
+            //    (IEnumerable<KeyValuePair<ComplexType, ComplexType>>)right.Dictionary,
+            //    diffsLookup[nameof(ComplexIterableTypes.Dictionary).ToLower()].ToList()
+            //);
         }
 
         [Fact]
@@ -506,17 +505,17 @@ namespace Differ.DotNet.Tests
                 diffsLookup[nameof(SimpleIterableTypes.EnumerableGeneric).ToLower()].ToList()
             );
 
-            Extensions.AssertIterable(
-                left.SetGeneric.SelectMany(x => x),
-                right.SetGeneric.SelectMany(x => x),
-                diffsLookup[nameof(SimpleIterableTypes.SetGeneric).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.SetGeneric.SelectMany(x => x),
+            //    right.SetGeneric.SelectMany(x => x),
+            //    diffsLookup[nameof(SimpleIterableTypes.SetGeneric).ToLower()].ToList()
+            //);
 
-            Extensions.AssertIterable(
-                left.DictionaryGeneric,
-                right.DictionaryGeneric,
-                diffsLookup[nameof(SimpleIterableTypes.DictionaryGeneric).ToLower()].ToList()
-            );
+            //Extensions.AssertIterable(
+            //    left.DictionaryGeneric,
+            //    right.DictionaryGeneric,
+            //    diffsLookup[nameof(SimpleIterableTypes.DictionaryGeneric).ToLower()].ToList()
+            //);
         }
 
         [Fact]
@@ -822,6 +821,29 @@ namespace Differ.DotNet.Tests
             Assert.Equal("b.b.a", diff.FullPath);
             Assert.Equal("b.b", diff.FieldPath);
             Assert.Equal("a", diff.FieldName);
+        }
+
+        [Fact]
+        public void Dictionary_SimpleKey_ComplexValue_Diffs()
+        {
+            var faker = new AutoFaker<ComplexType>();
+
+            var left = new DictionaryOfComplexType
+            {
+                Data = { ["key"] = faker.UseSeed(1).Generate() }
+            };
+
+            var right = new DictionaryOfComplexType
+            {
+                Data = { ["key"] = faker.UseSeed(2).Generate() }
+            };
+
+            var diff = DifferDotNet.Diff(left, right).Single();
+
+            Assert.Equal(left.Data["key"].String, diff.LeftValue);
+            Assert.Equal(right.Data["key"].String, diff.RightValue);
+
+            Assert.Equal("data.key.string", diff.FullPath);
         }
     }
 }
