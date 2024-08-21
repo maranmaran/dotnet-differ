@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Differ.DotNet.Tests.TestTypes
+﻿namespace Differ.DotNet.Tests.TestTypes
 {
     public class ComplexType
     {
@@ -12,9 +10,18 @@ namespace Differ.DotNet.Tests.TestTypes
         public ComplexType Nested { get; set; }
     }
 
-    public class DictionaryOfComplexType
+    public class ComplexTypeWithToStringOverride
     {
-        [DiffCollectionId("Key")]
-        public Dictionary<string, ComplexType> Data { get; set; } = new();
+        public string String { get; set; }
+
+        public static string Name()
+        {
+            return nameof(ComplexTypeWithToStringOverride);
+        }
+
+        public override string ToString()
+        {
+            return Name();
+        }
     }
 }

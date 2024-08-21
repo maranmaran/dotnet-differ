@@ -148,49 +148,6 @@ namespace Differ.DotNet
             var leftDict = leftObj as IDictionary;
             var rightDict = rightObj as IDictionary;
 
-            //// Check for DiffArrayIdPropertyName attribute
-            //PropertyInfo idProperty = null;
-            //if (prop != null && prop.GetCustomAttribute<DiffCollectionId>() is { } idAttr)
-            //{
-            //    idProperty = underlyingType?.GetProperty(idAttr.Name);
-            //}
-
-            //// key based
-            //if (idProperty != null)
-            //{
-            //    var leftMap = leftArr.ToDictionary(idProperty.GetValue);
-            //    var rightMap = rightArr.ToDictionary(idProperty.GetValue);
-
-            //    var mapPairs = leftMap.Concat(rightMap).GroupBy(x => x.Key)
-            //        .ToDictionary(
-            //            x => x.Key,
-            //            x => (
-            //                Left: leftMap.ContainsKey(x.Key) ? leftMap[x.Key] : null,
-            //                Right: rightMap.ContainsKey(x.Key) ? rightMap[x.Key] : null
-            //            )
-            //        );
-
-            //    for (var i = 0; i < mapPairs.Count; i++)
-            //    {
-            //        var pair = mapPairs.ElementAt(i);
-            //        var curL = pair.Value.Left;
-            //        var curR = pair.Value.Right;
-
-            //        DiffRecursive(
-            //            path + $"{i}.",
-            //            customPath + $"{i}.",
-            //            prop,
-            //            underlyingType,
-            //            curL,
-            //            curR,
-            //            diffs,
-            //            actions
-            //        );
-            //    }
-
-            //    return true;
-            //}
-
             // Combine the keys from both dictionaries
             var allKeys = new HashSet<object>();
             if (leftDict != null)

@@ -55,9 +55,24 @@ namespace Differ.DotNet
                 return false;
             }
 
-            var typeDef = type.GetGenericTypeDefinition();
+            var genericTypeDefinition = type.GetGenericTypeDefinition();
 
-            return typeDef == typeof(Dictionary<,>);
+            return genericTypeDefinition == typeof(IDictionary<,>) ||
+                   type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>));
+        }
+
+        internal static bool IsSet(this Type type)
+        {
+            if (!type.IsGenericType)
+            {
+                return false;
+            }
+
+            var genericTypeDefinition = type.GetGenericTypeDefinition();
+
+            return genericTypeDefinition == typeof(ISet<>) ||
+                   genericTypeDefinition == typeof(HashSet<>) ||
+                   type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISet<>));
         }
 
         internal static Type GetIterableType(this Type type)
@@ -68,15 +83,6 @@ namespace Differ.DotNet
             }
 
             var genericArguments = type.GetGenericArguments();
-
-            if (genericArguments.Length == 2)
-            {
-                var dictionaryType = typeof(IDictionary<,>).MakeGenericType(genericArguments);
-                if (dictionaryType.IsAssignableFrom(type))
-                {
-                    return typeof(KeyValuePair<,>).MakeGenericType(genericArguments);
-                }
-            }
 
             return genericArguments.FirstOrDefault();
         }
