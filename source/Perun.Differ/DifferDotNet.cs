@@ -51,6 +51,11 @@ namespace Differ.DotNet
                 return diffs;
             }
 
+            if (HandleDictionary(path, customPath, prop, type, leftObj, rightObj, diffs, actions))
+            {
+                return diffs;
+            }
+
             if (HandleIterable(path, customPath, prop, type, leftObj, rightObj, diffs, actions))
             {
                 return diffs;
@@ -122,55 +127,68 @@ namespace Differ.DotNet
             return true;
         }
 
-        private static string GetCustomPropertyName<T>(Type type, T left, T right, PropertyInfo prop)
+        private static bool HandleDictionary<T>(
+            string path,
+            string customPath,
+            PropertyInfo prop,
+            Type type,
+            T leftObj, T rightObj,
+            DiffCollection diffs,
+            DiffActions actions
+        )
         {
-            var attr = prop?.GetCustomAttribute<DiffPropertyName>();
-            if (attr is null)
+            if (!type.IsDictionary())
             {
-                return null;
+                return false;
             }
 
-            if (attr.FromPropertyValue == false)
+            var keyType = type.GetGenericArguments()[0];
+            var valueType = type.GetGenericArguments()[1];
+
+            var leftDict = leftObj as IDictionary;
+            var rightDict = rightObj as IDictionary;
+
+            // Combine the keys from both dictionaries
+            var allKeys = new HashSet<object>();
+            if (leftDict != null)
             {
-                return attr.Name;
+                foreach (var key in leftDict.Keys)
+                {
+                    allKeys.Add(key);
+                }
             }
-
-            var segments = attr.Name.Split('.');
-            var nestedProp = prop;
-            var nestedType = type;
-            object nestedLeft = left;
-            object nestedRight = right;
-
-            for (var i = 0; i < segments.Length; i++)
+            if (rightDict != null)
             {
-                nestedProp = nestedType?.GetProperty(segments[i]);
-                if (nestedProp is null)
+                foreach (var key in rightDict.Keys)
                 {
-                    return attr.Name;
-                }
-
-                nestedType = nestedProp.PropertyType;
-                if (nestedType.IsIterable())
-                {
-                    return attr.Name;
-                }
-
-                if (i < segments.Length - 1)
-                {
-                    nestedLeft = TryGetValue(nestedProp, nestedLeft);
-                    nestedRight = TryGetValue(nestedProp, nestedRight);
+                    allKeys.Add(key);
                 }
             }
 
-            var customName = (TryGetValue(nestedProp, nestedRight) ?? TryGetValue(nestedProp, nestedLeft))?.ToString();
+            // Compare values associated with each key
+            foreach (var key in allKeys)
+            {
+                var leftValue = leftDict != null && leftDict.Contains(key) ? leftDict[key] : null;
+                var rightValue = rightDict != null && rightDict.Contains(key) ? rightDict[key] : null;
 
-            return customName ?? attr.Name;
-        }
+                // Construct paths using the dictionary key
+                var keyStr = key.ToString();
+                var fullPath = $"{path}{keyStr}";
+                var customFullPath = $"{customPath}{keyStr}";
 
-        [CanBeNull]
-        private static object TryGetValue(PropertyInfo prop, object obj)
-        {
-            return obj is not null ? prop.GetValue(obj) : null;
+                DiffRecursive(
+                    fullPath + ".",
+                    customFullPath + ".",
+                    prop,
+                    valueType,
+                    leftValue,
+                    rightValue,
+                    diffs,
+                    actions
+                );
+            }
+
+            return true;
         }
 
         private static bool HandleIterable<T>(
@@ -298,6 +316,57 @@ namespace Differ.DotNet
 
             diffs.Diffs.Add(diff.FullPath, diff);
             return true;
+        }
+
+        private static string GetCustomPropertyName<T>(Type type, T left, T right, PropertyInfo prop)
+        {
+            var attr = prop?.GetCustomAttribute<DiffPropertyName>();
+            if (attr is null)
+            {
+                return null;
+            }
+
+            if (attr.FromPropertyValue == false)
+            {
+                return attr.Name;
+            }
+
+            var segments = attr.Name.Split('.');
+            var nestedProp = prop;
+            var nestedType = type;
+            object nestedLeft = left;
+            object nestedRight = right;
+
+            for (var i = 0; i < segments.Length; i++)
+            {
+                nestedProp = nestedType?.GetProperty(segments[i]);
+                if (nestedProp is null)
+                {
+                    return attr.Name;
+                }
+
+                nestedType = nestedProp.PropertyType;
+                if (nestedType.IsIterable())
+                {
+                    return attr.Name;
+                }
+
+                if (i < segments.Length - 1)
+                {
+                    nestedLeft = TryGetValue(nestedProp, nestedLeft);
+                    nestedRight = TryGetValue(nestedProp, nestedRight);
+                }
+            }
+
+            var customName = (TryGetValue(nestedProp, nestedRight) ?? TryGetValue(nestedProp, nestedLeft))?.ToString();
+
+            return customName ?? attr.Name;
+        }
+
+        [CanBeNull]
+        private static object TryGetValue(PropertyInfo prop, object obj)
+        {
+            return obj is not null ? prop.GetValue(obj) : null;
         }
     }
 }
