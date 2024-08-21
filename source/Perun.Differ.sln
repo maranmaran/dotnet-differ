@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -16,12 +15,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Packages.props = Packages.props
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Playground", "Playground", "{987057D0-15C1-4D49-93D0-6F056F7AD014}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perun.Differ.Playground", "Perun.Differ.Playground\Perun.Differ.Playground.csproj", "{6B5A77FA-0750-4A83-8439-2203B9056A18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B5A77FA-0750-4A83-8439-2203B9056A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B5A77FA-0750-4A83-8439-2203B9056A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B5A77FA-0750-4A83-8439-2203B9056A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B5A77FA-0750-4A83-8439-2203B9056A18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8FB318C9-AA32-4122-86EA-76DA053C54C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FB318C9-AA32-4122-86EA-76DA053C54C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FB318C9-AA32-4122-86EA-76DA053C54C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,6 +43,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1DFDBD8C-A521-438B-987C-449ECA42CE20} = {179CBE0A-79C6-46DB-88A0-2C39D2672ACE}
+		{6B5A77FA-0750-4A83-8439-2203B9056A18} = {987057D0-15C1-4D49-93D0-6F056F7AD014}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3224F68-023A-4A9B-AA59-8C797CC395FA}
