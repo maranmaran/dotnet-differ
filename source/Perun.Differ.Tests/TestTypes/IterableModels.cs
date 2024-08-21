@@ -51,7 +51,7 @@ namespace Differ.DotNet.Tests.TestTypes
     {
         public string[][] ArrayGeneric { get; set; }
 
-        //public ISet<ISet<string>> SetGeneric { get; set; }
+        public ISet<ISet<string>> SetGeneric { get; set; }
         public IList<IList<string>> ListGeneric { get; set; }
 
         public IEnumerable<IEnumerable<string>> EnumerableGeneric { get; set; }
